@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Announcer;
+use App\Models\Furniture;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 
-class AnnouncerController extends Controller
+class FurnitureController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return Furniture::all();
     }
 
     /**
@@ -20,41 +21,40 @@ class AnnouncerController extends Controller
      */
     public function store(Request $request)
     {
-        $announcer = Announcer::create([
+        $furniture = Furniture::create([
             'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone
+            'description' => $request->description,
+            'price' => $request->price
         ]);
+        return $furniture;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Announcer $announcer)
+    public function show(Furniture $furniture)
     {
-        return $announcer;
+        return $furniture;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Announcer $announcer)
+    public function update(Request $request, Furniture $furniture)
     {
-        $announcer->update([
+        $furniture->update([
             'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone
+            'description' => $request->description,
+            'price' => $request->price
         ]);
-
-        return response()->json();
+        return $furniture;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Announcer $announcer)
+    public function destroy(Furniture $furniture)
     {
-        $announcer->delete();
         return Response()->json();
     }
 }

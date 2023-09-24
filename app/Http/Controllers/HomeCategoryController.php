@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\HomeCategory;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
-class HomeCategory extends Controller
+class HomeCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -28,7 +28,6 @@ class HomeCategory extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
@@ -44,7 +43,6 @@ class HomeCategory extends Controller
      */
     public function edit(HomeCategory $homeCategory)
     {
-        //
     }
 
     /**
