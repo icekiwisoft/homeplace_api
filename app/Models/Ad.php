@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Ad extends Model
 {
     use HasFactory;
+    protected $table = "house";
     protected $fillable = [
         'description',
+        'mainroom',
+        'toilet',
+        'kitchen',
+        'mainroom'
     ];
 }
