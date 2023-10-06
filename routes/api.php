@@ -55,8 +55,10 @@ Route::name("announcer.")->prefix("announcers")->group(function () {
 //this route handles all request related to media file
 Route::name("media.")->prefix("medias")->group(function () {
 
-    Route::get("/", [MediaController::class, "index"]);
-    Route::post("/", [MediaController::class, "index"]);
+    Route::get("/{id}", [MediaController::class, "index"]);
+    Route::post("/", [MediaController::class, "create"]);
+    Route::delete("/{id}", [MediaController::class, "delete"]);
+    Route::put("/{id}", [MediaController::class, "update"]);
     Route::post("/{announcer}", [MediaController::class, "index"]);
 });
 
