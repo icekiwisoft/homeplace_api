@@ -11,11 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ads', function (Blueprint $table) {
+        Schema::create('house', function (Blueprint $table) {
             $table->id();
-
+            $table->integer("price")->default(0);
+            $table->integer("toilet")->unsigned();
+            $table->integer("kitchen")->unsigned();
+            $table->integer("bedroom")->unsigned();
+            $table->integer("mainroom")->unsigned();
+            $table->integer("type")->default(0);
             $table->timestamps();
             $table->text("description")->nullable();
+            $table->foreign("announcer_id", "announcers")->references("id");
         });
 
 
@@ -26,6 +32,22 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name');
         });
+
+
+        Schema::create('furnitures', function (Blueprint $table) {
+            $table->id();
+            $table->string('phone_number');
+            $table->string('email')->nullable();
+            $table->timestamps();
+            $table->string('name');
+            $table->foreign("announcer_id", "announcers")->references("id");
+        });
+
+        Schema::create('furniturecategories', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('name');
+        });
     }
 
     /**
@@ -33,6 +55,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ads');
+        Schema::dropIfExists('house');
+
+        Schema::dropIfExists('announcers');
+
+        Schema::dropIfExists('furniturecategories');
+        Schema::dropIfExists('furnitures');
     }
 };

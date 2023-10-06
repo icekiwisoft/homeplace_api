@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeCategoryController;
 use App\Http\Controllers\AdController;
 use App\Http\Controllers\AnnouncerController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MediaController;
 
 
@@ -30,7 +31,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 //this route handles all request related to home
-Route::name("ad.")->prefix("home")->group(function () {
+Route::name("ad.")->group(function () {
 
     Route::apiResource('ad', AdController::class);
 });
@@ -57,4 +58,14 @@ Route::name("media.")->prefix("medias")->group(function () {
     Route::get("/", [MediaController::class, "index"]);
     Route::post("/", [MediaController::class, "index"]);
     Route::post("/{announcer}", [MediaController::class, "index"]);
+});
+
+
+
+Route::post('register/', [AuthController::class, "register"]);
+Route::post('login/', [AuthController::class, "login"]);
+
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });

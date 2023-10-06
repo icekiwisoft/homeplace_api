@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class FurnitureCategory extends Model
 {
     use HasFactory;
+
+    protected $table = "furniturecategories";
+
+    protected $fillable = [
+        'name'
+    ];
 }

@@ -22,7 +22,6 @@ class FurnitureController extends Controller
     public function store(Request $request)
     {
         $furniture = Furniture::create([
-            'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price
         ]);
@@ -55,6 +54,7 @@ class FurnitureController extends Controller
      */
     public function destroy(Furniture $furniture)
     {
+        $furniture->delete();
         return Response()->json();
     }
 }
