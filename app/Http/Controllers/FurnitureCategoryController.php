@@ -23,10 +23,7 @@ class FurnitureCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        FurnitureCategory::create([
-            'name' => $request->name,
-            'description' => $request->description
-        ]);
+        FurnitureCategory::create($request->all());
 
         return Response()->json();
     }

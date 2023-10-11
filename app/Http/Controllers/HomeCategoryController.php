@@ -15,13 +15,6 @@ class HomeCategoryController extends Controller
     {
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,22 +28,15 @@ class HomeCategoryController extends Controller
      */
     public function show(HomeCategory $homeCategory)
     {
-        //
+        return $homeCategory;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(HomeCategory $homeCategory)
-    {
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, HomeCategory $homeCategory)
     {
-        //
     }
 
     /**

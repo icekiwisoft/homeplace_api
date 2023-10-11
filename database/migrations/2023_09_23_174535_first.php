@@ -36,11 +36,13 @@ return new class extends Migration
 
         Schema::create('furnitures', function (Blueprint $table) {
             $table->id();
-            $table->string('phone_number');
-            $table->string('email')->nullable();
+            $table->integer('pricing')->default(0);
             $table->timestamps();
             $table->string('name');
+            $table->text("description")->nullable();
+            $table->foreign("category_id", "furniturecategories")->references("id");
             $table->foreign("announcer_id", "announcers")->references("id");
+            $table->boolean("new")->default(true);
         });
 
         Schema::create('furniturecategories', function (Blueprint $table) {

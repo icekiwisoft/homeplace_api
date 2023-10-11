@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAnnouncerRequest;
+use App\Http\Resources\AnnouncerResource;
 use App\Models\Announcer;
 use Illuminate\Http\Request;
 
@@ -18,13 +20,9 @@ class AnnouncerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAnnouncerRequest $request)
     {
-        $announcer = Announcer::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone
-        ]);
+        $announcer = Announcer::create($request->all());
     }
 
     /**
@@ -32,7 +30,7 @@ class AnnouncerController extends Controller
      */
     public function show(Announcer $announcer)
     {
-        return $announcer;
+        return new AnnouncerResource($announcer);
     }
 
     /**
