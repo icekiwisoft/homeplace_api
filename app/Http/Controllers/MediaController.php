@@ -17,7 +17,7 @@ class MediaController extends Controller
         if ($fichier) {
             $path = storage_path('app/upload/' . $fichier->file);
             if (file_exists($path)) {
-                return response()->file($path);
+                return response()->json(['media' => $path], 200);
             }else{
                 return response()->json(['message' => 'fichier pas vu'], 404);
             };
@@ -89,23 +89,27 @@ class MediaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Media $media)
+    public function update(Request $request)
     {
         try{
-            $media->file = $request->input('file');
-                $media->description = $request->description;
-                $filename = str_replace(' ', '', $media->getClientOriginalName());
-                if($media->file !=  null && $media->description!=null){
-                    $size = $media->getSize();
+            // $media->file = $request->input('file');
+                // $media->description = $request->description;
+                $media = Media::find($request->id);
+                // $filename = str_replace(' ', '', $media->getClientOriginalName());
+                if($request){
+                    $fichier = $request->file('file');
+                    $size = $fichier->getSize();
                     if($size >= 1000000){
                         return response()->json([
                             'status_code' => 422,
                             'status_message' => 'la taille du fichier doit etre inferieure a 1 Mo',
                         ]);
                     }else{
+                        $filename = str_replace(' ', '', $fichier->getClientOriginalName());
+
                         $fichier_save = $request->file->storeAs('upload', $filename);
                         // $img = new Media();
-                        $media->file = $request->getClientOriginalName();
+                        $media->file = $filename;
                         $media->description = $request->description;
                         $media->save();
                         
@@ -129,23 +133,15 @@ class MediaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(Media $media)
+    public function delete($id)
     {
-         try{
-            // $pos = post::find($request->post_id);
+     try{
+            $media = Media::find($id);
             if( $media){
-                // if($pos->user_id == auth()->user()->id){
                     $media->delete();
-                // }else{
-                //     return response()->json([
-                //         'status_code' => 422,
-                //         'status_message' => 'vous n\'avez pas le droit de modifier cette image',
-                //     ]);
-                //     }
                 return response()->json([
                     'status_code' => 200,
                     'status_message' => 'media supprimer avec succes',
-                    'data' => $media
                 ]);
             }else{
                 return response()->json([
