@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //this route handles all request related to home
 Route::name()->group(function () {
 
-    Route::apiResource('ad', AdController::class);
+    Route::apiResource('ads', AdController::class);
     Route::apiResource('homecategories', HomeCategoryController::class);
     Route::apiResource('furniturecategories', FurnitureCategoryController::class);
     Route::apiResource('furnitures', FurnitureController::class);
@@ -41,20 +41,17 @@ Route::name()->group(function () {
         ->shallow()
         ->except(['update', 'show', 'destroy']);
     Route::apiResource('ad.categories', SpecFurnitureCategoryController::class)->shallow()
-        ->except(['update', 'show', 'destroy']);;
+        ->except(['update', 'show', 'destroy']);
+
+
+    Route::apiResource('ads.medias', SpecFurnitureCategoryController::class)->shallow()
+        ->except(['update', 'show', 'destroy']);
+
+    Route::apiResource('medias', MediaController::class);
 });
 
 
 
-//this route handles all request related to media file
-Route::name("media.")->prefix("medias")->group(function () {
-
-    Route::get("/{id}", [MediaController::class, "index"]);
-    Route::post("/", [MediaController::class, "create"]);
-    Route::delete("/{id}", [MediaController::class, "delete"]);
-    Route::put("/{id}", [MediaController::class, "update"]);
-    Route::post("/{announcer}", [MediaController::class, "index"]);
-});
 
 
 

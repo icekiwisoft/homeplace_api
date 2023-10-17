@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ad;
+use App\Models\Media;
 use Illuminate\Http\Request;
 
-class SpecHomeCategoryController extends Controller
+class SpecHomeMedia extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Ad $ad)
+    public function index()
     {
         //
     }

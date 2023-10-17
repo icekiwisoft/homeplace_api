@@ -14,7 +14,8 @@ class AnnouncerController extends Controller
      */
     public function index()
     {
-        //
+        $annoncers = Announcer::all();
+        return AnnouncerResource::collection($annoncers);
     }
 
     /**
@@ -23,6 +24,8 @@ class AnnouncerController extends Controller
     public function store(StoreAnnouncerRequest $request)
     {
         $announcer = Announcer::create($request->all());
+
+        return $announcer;
     }
 
     /**

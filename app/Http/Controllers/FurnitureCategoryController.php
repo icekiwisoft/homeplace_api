@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreFurnitureCategoryRequest;
 use App\Models\Furniture;
 use App\Models\FurnitureCategory;
 use GuzzleHttp\Psr7\Response;
@@ -21,7 +22,7 @@ class FurnitureCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreFurnitureCategoryRequest $request)
     {
         FurnitureCategory::create($request->all());
 
@@ -50,5 +51,6 @@ class FurnitureCategoryController extends Controller
     public function destroy(FurnitureCategory $furnitureCategory)
     {
         $furnitureCategory->delete();
+        return response()->json();
     }
 }
