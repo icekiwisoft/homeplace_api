@@ -21,6 +21,11 @@ return [
         'scheme' => 'https',
     ],
 
+    'mandrill' => [
+        'secret' => env('MANDRILL_KEY'),
+    ],
+    
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],

@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
 
 class StoreMediaRequest extends FormRequest
 {
@@ -22,7 +25,16 @@ class StoreMediaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => ['required', 'image', 'size:8192'],
+            'file' => ['required', 'image', 'max:1192'],
         ];
     }
+    public function failedValidation(Validator $validator){
+        throw new HttpResponseException(response()->json([
+            'success' => 'false',
+            'error' => true,
+            'message' => 'validation error',
+            'errorsList' => $validator->errors()
+        ]));
+    }
+
 }

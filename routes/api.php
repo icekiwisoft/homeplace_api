@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FurnitureCategoryController;
 use App\Http\Controllers\FurnitureController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\SpecFurnitureCategoryController;
 
 /*
@@ -48,6 +49,7 @@ Route::name()->group(function () {
         ->except(['update', 'show', 'destroy']);
 
     Route::apiResource('medias', MediaController::class);
+    Route::apiResource('newsletter', NewsletterController::class);
 });
 
 

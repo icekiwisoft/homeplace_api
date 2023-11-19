@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMediaRequest;
 use App\Models\Media;
+use Exception;
 use Illuminate\Http\Request;
 
 class MediaController extends Controller
@@ -35,7 +36,7 @@ class MediaController extends Controller
             $fichier = $request->file('file');
             // Supprimer les espaces dans le nom de fichier
             $filename = str_replace(' ', '', $fichier->getClientOriginalName());
-
+            // dd($filename);
             $extension = $fichier->getClientOriginalExtension();
             // get file size in byte
             $fichier_save = $request->file->storeAs('upload', $filename);
@@ -50,21 +51,35 @@ class MediaController extends Controller
         }
     }
 
-    public function update(StoreMediaRequest $request, Media $media)
+    public function update(Request $request, Media $media)
     {
-        try {
-            $media->file = $request->input('file');
-            $media->description = $request->description;
-            $filename = str_replace(' ', '', $media->getClientOriginalName());
+        dd($request->file);
+        // try {
+            // dd($media);
+            $img = new Media();
+            $imgs = $request->input('file');
+            dd($imgs);
+            // $media->description = $request->description;
+            $filename = str_replace(' ', '', $imgs->getClientOriginalName());
+            dd($img);
             $fichier_save = $request->file->storeAs('upload', $filename);
-            $media->file = $request->getClientOriginalName();
-            $media->description = $request->description;
-            $media->save();
+            
+            dd($img);
+            $img->file = $request->getClientOriginalName();
+            $img->description = $request->description;
+            dd($img);
 
-            return response()->json($media, 200);
-        } catch (Exception $e) {
-            return response()->json($e);
-        }
+            $media->save();
+            dd($media);
+            // $img = new Media();
+            // $img->file = $request->getClientOriginalName();
+            // $img->description = $request->description;
+            // dd($img);
+            // $img->save();
+            return response()->json($img, 201);
+        // } catch (Exception $e) {
+        //     return response()->json($e);
+        // }
     }
 
     /**
@@ -73,6 +88,6 @@ class MediaController extends Controller
     public function destroy(Media $media)
     {
         $media->delete();
-        return response()->json([], 200);
+        return response()->json([], 201);
     }
 }
