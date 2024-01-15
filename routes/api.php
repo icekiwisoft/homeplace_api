@@ -8,6 +8,7 @@ use App\Http\Controllers\AdController;
 use App\Http\Controllers\AnnouncerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\NewsletterController;
 
 
 
@@ -62,6 +63,11 @@ Route::name("media.")->prefix("medias")->group(function () {
     Route::post("/{announcer}", [MediaController::class, "index"]);
 });
 
+Route::name("newsletter.")->prefix("newsletter")->group(function () {
+
+    Route::get("/", [NewsletterController::class, "index"]);
+    Route::post("/", [NewsletterController::class, "store"]);
+});
 
 
 Route::post('register/', [AuthController::class, "register"]);
