@@ -11,6 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('announcers', function (Blueprint $table) {
+            $table->id();
+            $table->string('phone_number');
+            $table->string('email')->nullable();
+            $table->timestamps();
+            $table->string('name');
+        });
+
         Schema::create('house', function (Blueprint $table) {
             $table->id();
             $table->integer("price")->default(0);
@@ -21,16 +29,7 @@ return new class extends Migration
             $table->integer("type")->default(0);
             $table->timestamps();
             $table->text("description")->nullable();
-            $table->foreign("announcer_id", "announcers")->references("id");
-        });
-
-
-        Schema::create('announcers', function (Blueprint $table) {
-            $table->id();
-            $table->string('phone_number');
-            $table->string('email')->nullable();
-            $table->timestamps();
-            $table->string('name');
+            $table->bigInteger("announcer_id")->foreign("announcer_id")->references("id")->on("announcers");
         });
 
 
@@ -40,7 +39,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->timestamps();
             $table->string('name');
-            $table->foreign("announcer_id", "announcers")->references("id");
+            $table->bigInteger("announcer_id")->foreign("announcer_id")->references("id")->on("announcers");
         });
 
         Schema::create('furniturecategories', function (Blueprint $table) {
@@ -55,9 +54,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('house');
-
         Schema::dropIfExists('announcers');
+        Schema::dropIfExists('house');
 
         Schema::dropIfExists('furniturecategories');
         Schema::dropIfExists('furnitures');
