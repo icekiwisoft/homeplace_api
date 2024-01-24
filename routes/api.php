@@ -64,14 +64,19 @@ Route::name("media.")->prefix("medias")->group(function () {
 });
 
 Route::name("newsletter.")->prefix("newsletter")->group(function () {
+    Route::middleware("auth")->group(function () {
 
-    Route::get("/", [NewsletterController::class, "index"]);
-    Route::post("/", [NewsletterController::class, "store"]);
+        Route::get("/", [NewsletterController::class, "index"]);
+        Route::post("/", [NewsletterController::class, "store"]);
+});
 });
 
 
 Route::post('register/', [AuthController::class, "register"]);
 Route::post('login/', [AuthController::class, "login"]);
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/refresh', [AuthController::class, 'refresh']);
+Route::get('/user-profile', [AuthController::class, 'userProfile']); 
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

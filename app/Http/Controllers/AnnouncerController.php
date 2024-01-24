@@ -20,11 +20,29 @@ class AnnouncerController extends Controller
      */
     public function store(Request $request)
     {
-        $announcer = Announcer::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone
-        ]);
+        try{
+            $announcer = Announcer::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone_number' => $request->phone
+            ]);
+            return response()->json([$announcer], 201);
+        }catch(Exception $e){
+            return response()->json($e, 400);
+        }
+
+        // try {
+        //     $an = new Announcer();
+        //     $an->name = $request->name;
+        //     $an->email = $request->email;
+        //     $an->phone_number = $request->phone;
+        //     $an->save();
+        //     return response()->json([$an], 201);
+        //       } catch (Exception $e) {
+        //           return response()->json($e, 400);
+        //       }
+
+
     }
 
     /**
@@ -43,7 +61,7 @@ class AnnouncerController extends Controller
         $announcer->update([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone
+            'phone_number' => $request->phone
         ]);
 
         return response()->json();

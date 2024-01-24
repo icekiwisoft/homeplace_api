@@ -11,5 +11,6 @@ class Media extends Model
     protected $fillable = [
         'file',
         'description',
+        'announcer_id'
     ];
 }

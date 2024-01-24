@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('file');
             $table->string('description');
+            $table->bigInteger("announcer_id")->foreign("announcer_id")->references("id")->on("announcers");
             $table->timestamps();
         });
     }
