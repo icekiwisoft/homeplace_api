@@ -5,13 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Announcer extends Model
+class newsletter extends Model
 {
     use HasFactory;
-
+    protected $table = "newsletter";
     protected $fillable = [
-        'name',
-        'phone_number',
-        'email',
+        'email', 
     ];
 }
