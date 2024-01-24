@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\newsletter;
 use Illuminate\Http\Request;
 
+
 class NewsletterController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
@@ -19,7 +21,9 @@ class NewsletterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+
+    public function store(AddEmailRequest $request)
+
     {
         try {
             $mail = new newsletter();
@@ -31,12 +35,15 @@ class NewsletterController extends Controller
               }
     }
 
+
     /**
      * Display the specified resource.
      */
     public function show(newsletter $newsletter)
     {
-        //
+
+        return $newsletter;
+
     }
 
     /**
