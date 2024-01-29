@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\newsletter;
 use Illuminate\Http\Request;
-use App\Http\Requests\AddEmailRequest;
-use Exception;
+
 
 class NewsletterController extends Controller
 {
@@ -22,7 +21,9 @@ class NewsletterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(AddEmailRequest $request)
+
     {
         try {
             $mail = new newsletter();
@@ -39,7 +40,9 @@ class NewsletterController extends Controller
      */
     public function show(newsletter $newsletter)
     {
+
         return $newsletter;
+
     }
 
     /**

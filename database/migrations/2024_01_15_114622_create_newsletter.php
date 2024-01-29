@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('media', function (Blueprint $table) {
+        Schema::create('newsletter', function (Blueprint $table) {
             $table->id();
-            $table->string('file');
-            $table->string('description')->nullable();
-            $table->string("type")->default("image");
-            $table->string('description');
-            $table->bigInteger("announcer_id")->foreign("announcer_id")->references("id")->on("announcers");
+            $table->string('email');
             $table->timestamps();
         });
     }
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists('newsletter');
     }
 };

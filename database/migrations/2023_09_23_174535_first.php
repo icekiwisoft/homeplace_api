@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('name');
         });
 
+
         Schema::create('homecategories', function (Blueprint $table) {
             $table->timestamps();
             $table->string('name')->primary();
@@ -38,6 +39,7 @@ return new class extends Migration
 
             $table->timestamps();
             $table->text("description")->nullable();
+
             $table->foreign("category_id")->references("name")->on("homecategories");
 
             $table->foreign("announcer_id")->references("id")->on("announcers")->onDelete("cascade");
@@ -49,6 +51,8 @@ return new class extends Migration
         Schema::create('furniturecategories', function (Blueprint $table) {
             $table->timestamps();
             $table->string('name')->primary();
+            $table->bigInteger("announcer_id")->foreign("announcer_id")->references("id")->on("announcers");
+
         });
 
 
@@ -58,9 +62,12 @@ return new class extends Migration
             $table->integer('pricing')->default(0);
             $table->timestamps();
             $table->string('name');
+
             $table->text("description")->nullable();
             $table->unsignedBigInteger("announcer_id");
             $table->string("category_id");
+            $table->bigInteger("announcer_id")->foreign("announcer_id")->references("id")->on("announcers");
+
 
             $table->foreign("category_id")->references("name")->on("furniturecategories");
             $table->foreign("announcer_id")->references("id")->on("announcers");
@@ -73,10 +80,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('house');
-
         Schema::dropIfExists('announcers');
+
         Schema::dropIfExists('homecategories');
+
+        Schema::dropIfExists('house');
 
 
         Schema::dropIfExists('furniturecategories');

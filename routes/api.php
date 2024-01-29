@@ -10,7 +10,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FurnitureCategoryController;
 use App\Http\Controllers\FurnitureController;
 use App\Http\Controllers\MediaController;
+
 use App\Http\Controllers\SpecFurnitureCategoryController;
+use App\Http\Controllers\NewsletterController;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -53,10 +58,20 @@ Route::name()->group(function () {
 
 
 
+Route::name("newsletter.")->prefix("newsletter")->group(function () {
+    Route::middleware("auth")->group(function () {
+
+        Route::get("/", [NewsletterController::class, "index"]);
+        Route::post("/", [NewsletterController::class, "store"]);
+});
+});
 
 
 Route::post('register/', [AuthController::class, "register"]);
 Route::post('login/', [AuthController::class, "login"]);
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/refresh', [AuthController::class, 'refresh']);
+Route::get('/user-profile', [AuthController::class, 'userProfile']); 
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -26,6 +26,7 @@ class AnnouncerController extends Controller
         $announcer = Announcer::create($request->all());
 
         return $announcer;
+
     }
 
     /**
@@ -44,7 +45,7 @@ class AnnouncerController extends Controller
         $announcer->update([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone
+            'phone_number' => $request->phone
         ]);
 
         return response()->json();
