@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreFurnitureRequest;
+use App\Http\Resources\FurnitureResource;
 use App\Models\Furniture;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
@@ -13,19 +15,16 @@ class FurnitureController extends Controller
      */
     public function index()
     {
-        return Furniture::all();
+        return FurnitureResource::collection(Furniture::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreFurnitureRequest $request)
     {
-        $furniture = Furniture::create([
-            'description' => $request->description,
-            'price' => $request->price
-        ]);
-        return $furniture;
+        $furniture = Furniture::create($request->all());
+        return new FurnitureResource($furniture);
     }
 
     /**
@@ -33,7 +32,7 @@ class FurnitureController extends Controller
      */
     public function show(Furniture $furniture)
     {
-        return $furniture;
+        return new FurnitureResource($furniture);
     }
 
     /**

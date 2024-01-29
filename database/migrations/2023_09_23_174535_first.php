@@ -11,12 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('announcers', function (Blueprint $table) {
             $table->id();
             $table->string('phone_number');
             $table->string('email')->nullable();
             $table->timestamps();
             $table->string('name');
+        });
+
+
+        Schema::create('homecategories', function (Blueprint $table) {
+            $table->timestamps();
+            $table->string('name')->primary();
         });
 
         Schema::create('house', function (Blueprint $table) {
@@ -27,25 +34,44 @@ return new class extends Migration
             $table->integer("bedroom")->unsigned();
             $table->integer("mainroom")->unsigned();
             $table->integer("type")->default(0);
+            $table->unsignedBigInteger("announcer_id");
+            $table->string("category_id");
+
             $table->timestamps();
             $table->text("description")->nullable();
-            $table->bigInteger("announcer_id")->foreign("announcer_id")->references("id")->on("announcers");
+
+            $table->foreign("category_id")->references("name")->on("homecategories");
+
+            $table->foreign("announcer_id")->references("id")->on("announcers")->onDelete("cascade");
         });
+
+
+
+
+        Schema::create('furniturecategories', function (Blueprint $table) {
+            $table->timestamps();
+            $table->string('name')->primary();
+            $table->bigInteger("announcer_id")->foreign("announcer_id")->references("id")->on("announcers");
+
+        });
+
 
 
         Schema::create('furnitures', function (Blueprint $table) {
             $table->id();
-            $table->string('phone_number');
-            $table->string('email')->nullable();
+            $table->integer('pricing')->default(0);
             $table->timestamps();
             $table->string('name');
-            $table->bigInteger("announcer_id")->foreign("announcer_id")->references("id")->on("announcers");
-        });
 
-        Schema::create('furniturecategories', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->string('name');
+            $table->text("description")->nullable();
+            $table->unsignedBigInteger("announcer_id");
+            $table->string("category_id");
+            $table->bigInteger("announcer_id")->foreign("announcer_id")->references("id")->on("announcers");
+
+
+            $table->foreign("category_id")->references("name")->on("furniturecategories");
+            $table->foreign("announcer_id")->references("id")->on("announcers");
+            $table->boolean("new")->default(true);
         });
     }
 
@@ -55,7 +81,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('announcers');
+
+        Schema::dropIfExists('homecategories');
+
         Schema::dropIfExists('house');
+
 
         Schema::dropIfExists('furniturecategories');
         Schema::dropIfExists('furnitures');

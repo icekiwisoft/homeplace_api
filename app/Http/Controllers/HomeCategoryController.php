@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreHomeCategoryRequest;
 use App\Models\HomeCategory;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
@@ -13,21 +14,18 @@ class HomeCategoryController extends Controller
      */
     public function index()
     {
+
+        $homecategories = HomeCategory::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreHomeCategoryRequest $request)
     {
+
+        HomeCategory::create($request->all());
     }
 
     /**
@@ -35,29 +33,23 @@ class HomeCategoryController extends Controller
      */
     public function show(HomeCategory $homeCategory)
     {
-        //
+        return $homeCategory;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(HomeCategory $homeCategory)
-    {
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, HomeCategory $homeCategory)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HomeCategory $homeCategory)
+    public function destroy(HomeCategory $homecategory)
     {
-        //
+        $homecategory->delete();
+        return response()->json([], 204);
     }
 }

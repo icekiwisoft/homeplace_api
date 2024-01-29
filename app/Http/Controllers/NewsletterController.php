@@ -30,11 +30,10 @@ class NewsletterController extends Controller
             $mail->email = $request->email;
             $mail->save();
             return response()->json([$mail], 201);
-              } catch (Exception $e) {
-                  return response()->json($e, 400);
-              }
+        } catch (Exception $e) {
+            return response()->json($e, 400);
+        }
     }
-
 
     /**
      * Display the specified resource.
