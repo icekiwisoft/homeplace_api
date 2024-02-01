@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('media', function (Blueprint $table) {
-            $table->uuid("id")->primary();
-            $table->string('file');
-           $table->string('thumbnail');
-            $table->string("type")->default("image");
-            $table->string("announcer_id")->nullable();
+        Schema::create('categories', function (Blueprint $table) {
             $table->timestamps();
+            $table->integer("type")->default(0); //0 for house and 1 for furniture
+            $table->string('name')->unique();
+            $table->ulid("id");
         });
     }
 
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists('category');
     }
 };

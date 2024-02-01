@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('media', function (Blueprint $table) {
-            $table->uuid("id")->primary();
-            $table->string('file');
-           $table->string('thumbnail');
-            $table->string("type")->default("image");
-            $table->string("announcer_id")->nullable();
+        Schema::create('announcers', function (Blueprint $table) {
+            $table->string("id")->primary();
+            $table->string('phone_number')->nullable();
+            $table->string('email')->nullable();
+            $table->string('verified')->default(false);
+
             $table->timestamps();
+            $table->string('name');
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists('announcer');
     }
 };

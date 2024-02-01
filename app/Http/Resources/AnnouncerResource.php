@@ -15,7 +15,11 @@ class AnnouncerResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'name' => $this->name
+            'name' => $this->name,
+            'email'=> $this->email,
+            'contact'=> $this->phone_number,
+            'id'=>$this->id
+
         ];
     }
 }

@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAdRequest;
+use App\Http\Resources\Adresource;
+use App\Http\Resources\AnnouncerResource;
 use App\Models\Ad;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use App\Models\Announcer;
+use App\Models\House;
 
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 //this controller handles all request related to ads
 
@@ -18,24 +23,26 @@ class AdController extends Controller
      */
     public function index()
     {
-        $ads = Ad::all();
+        $ads = Ad::all()->load("announcer");
 
-        return $ads;
+        return  Adresource::collection($ads);
     }
 
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAdRequest $request)
     {
-        // On crée un nouvel utilisateur
-        $ad = Ad::create([
-            'description' => $request->description
-        ]);
+        $id = $request->input("announcer", null);
+        $validated= $request->validated();
+       $ad= new Ad($validated);
 
-        // On retourne les informations du nouvel utilisateur en JSON
-        return $ad;
+       $announcer=Announcer::findOrFail($validated["announcer_id"]);
+       $ad->announcer()->associate($announcer);
+
+$ad->save();
+        return new AdResource($ad);
     }
 
     /**
@@ -44,7 +51,10 @@ class AdController extends Controller
     public function show(Ad $ad)
     {
 
-        return $ad;
+        if (!$ad) {
+            throw new NotFoundHttpException('Ad not found');
+        }
+        return new Adresource($ad);
     }
 
 
@@ -70,7 +80,7 @@ class AdController extends Controller
      */
     public function destroy(Ad $ad)
     {
-        $ad->delete();
+        $ad->deleteOrFail();
         return response()->json();
     }
 }

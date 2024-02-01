@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('media', function (Blueprint $table) {
-            $table->uuid("id")->primary();
-            $table->string('file');
-           $table->string('thumbnail');
-            $table->string("type")->default("image");
-            $table->string("announcer_id")->nullable();
+        Schema::create('announcer_media', function (Blueprint $table) {
+            $table->uuid("media_id");
+            $table->string("announcer_id");
+            $table->id();
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists('announcer_media');
     }
 };

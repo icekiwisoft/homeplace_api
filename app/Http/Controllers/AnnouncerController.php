@@ -23,10 +23,9 @@ class AnnouncerController extends Controller
      */
     public function store(StoreAnnouncerRequest $request)
     {
-        $announcer = Announcer::create($request->all());
+        $announcer = Announcer::create($request->validated());
 
-        return $announcer;
-
+        return new AnnouncerResource($announcer);
     }
 
     /**
@@ -57,6 +56,6 @@ class AnnouncerController extends Controller
     public function destroy(Announcer $announcer)
     {
         $announcer->delete();
-        return Response()->json();
+        return Response()->json(null, 200);
     }
 }
