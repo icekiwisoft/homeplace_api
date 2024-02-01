@@ -22,7 +22,7 @@ class NewsletterController extends Controller
      * Store a newly created resource in storage.
      */
 
-    public function store(AddEmailRequest $request)
+    public function store(Request $request)
 
     {
         try {
@@ -42,7 +42,6 @@ class NewsletterController extends Controller
     {
 
         return $newsletter;
-
     }
 
     /**

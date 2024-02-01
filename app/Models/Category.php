@@ -2,31 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Announcer extends Model
+class Category extends Model
 {
-    use HasFactory;
-    public $incrementing = false;
+    use HasFactory,HasUlids;
     protected $fillable = [
         'name',
-        'phone_number',
-        'email'
+        'type'
     ];
 
     public function ads(): HasMany
     {
-
         return $this->hasMany(Ad::class);
-    }
-
-
-    public function medias(): HasMany
-    {
-
-        return $this->hasMany(Media::class);
     }
 }

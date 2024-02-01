@@ -5,17 +5,18 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeCategoryController;
 use App\Http\Controllers\AdController;
+use App\Http\Controllers\AdMediaController;
+use App\Http\Controllers\AnnouncerAdController;
 use App\Http\Controllers\AnnouncerController;
+use App\Http\Controllers\AnnouncerMediaController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\FurnitureCategoryController;
-use App\Http\Controllers\FurnitureController;
+use App\Http\Controllers\CategoryController;
+
+use App\Http\Controllers\MediaAdController;
 use App\Http\Controllers\MediaController;
 
-use App\Http\Controllers\SpecFurnitureCategoryController;
 use App\Http\Controllers\NewsletterController;
-
-
-
+use App\Http\Controllers\StatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,22 +38,34 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //this route handles all request related to home
 Route::name()->group(function () {
 
-    Route::apiResource('ads', AdController::class);
-    Route::apiResource('homecategories', HomeCategoryController::class);
-    Route::apiResource('furniturecategories', FurnitureCategoryController::class);
-    Route::apiResource('furnitures', FurnitureController::class);
-    Route::apiResource('announcers', AnnouncerController::class);
-    Route::apiResource('furnitures.categories', SpecFurnitureCategoryController::class)
-        ->shallow()
-        ->except(['update', 'show', 'destroy']);
-    Route::apiResource('ad.categories', SpecFurnitureCategoryController::class)->shallow()
-        ->except(['update', 'show', 'destroy']);
 
+    Route::apiResources([
+      'ads'=>AdController::class,
+        'categories'=> CategoryController::class ,
+        'announcers'=> AnnouncerController::class,
+        'medias'=> MediaController::class
+    ]);
 
-    Route::apiResource('ads.medias', SpecFurnitureCategoryController::class)->shallow()
-        ->except(['update', 'show', 'destroy']);
+    Route::apiResource('announcers.ads', AnnouncerAdController::class)->only([
+        "index",
+    ]);;
 
     Route::apiResource('medias', MediaController::class);
+  
+    Route::apiResource('medias.ads', MediaAdController::class)->only([
+        "index"
+    ]);
+
+    Route::apiResource('announcers.medias', AnnouncerMediaController::class)->only([
+        "index",
+    ]);;
+
+
+    Route::get("/", StatController::class);
+    Route::apiResource('ads.medias', AdMediaController::class)->only([
+        "store", "destroy", "index"
+    ]);
+
 });
 
 
@@ -71,9 +84,10 @@ Route::post('register/', [AuthController::class, "register"]);
 Route::post('login/', [AuthController::class, "login"]);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/refresh', [AuthController::class, 'refresh']);
-Route::get('/user-profile', [AuthController::class, 'userProfile']); 
+Route::get('/user-profile', [AuthController::class, 'userProfile']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+

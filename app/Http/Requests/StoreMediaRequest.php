@@ -22,7 +22,7 @@ class StoreMediaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => ['required', 'image', 'size:8192'],
+            'files' => ['required'],
         ];
     }
 }

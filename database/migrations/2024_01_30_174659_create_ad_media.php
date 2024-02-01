@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('media', function (Blueprint $table) {
-            $table->uuid("id")->primary();
-            $table->string('file');
-           $table->string('thumbnail');
-            $table->string("type")->default("image");
-            $table->string("announcer_id")->nullable();
+        Schema::create('ad_media', function (Blueprint $table) {
+            $table->string("ad_id");
+            $table->uuid("media_id");
+            $table->id();
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists('ad_media');
     }
 };

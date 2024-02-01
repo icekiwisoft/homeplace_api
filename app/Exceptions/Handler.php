@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -12,6 +13,8 @@ class Handler extends ExceptionHandler
      *
      * @var array<int, string>
      */
+
+
     protected $dontFlash = [
         'current_password',
         'password',
@@ -26,5 +29,10 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            return response()->json(null,404);
+        });
     }
+
+
 }

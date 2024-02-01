@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Announcer;
+use App\Models\Media;
+use App\Observers\AnnouncerObserver;
+use App\Observers\MediaObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,7 +29,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Media::observe(MediaObserver::class);
+        Announcer::observe(AnnouncerObserver::class);
     }
 
     /**
