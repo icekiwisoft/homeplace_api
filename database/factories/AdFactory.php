@@ -17,7 +17,9 @@ class AdFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'item_type' => $this->faker->randomElement([1,0]),
+            'price' => $this->faker->numberBetween(5000,20000),
+            'description' => $this->faker->monthName()
         ];
     }
 }

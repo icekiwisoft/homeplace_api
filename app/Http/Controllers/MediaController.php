@@ -28,29 +28,4 @@ class MediaController extends Controller
     }
 
 
-    //AD A NEW MEDIA
-    public function store(Request $request)
-    {
-        $medias = new Collection();
-       
-        
-        foreach ($request->file("medias") as $file) {
-            $img = new Media();
-            $img->file = $file;
-
-    
-            $img->save();
-            $medias->push($img);
-        }
-        return  MediaResource::collection($medias);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function delete(Media $media)
-    {
-        $media->delete();
-        return  response()->json(null, 200);
-    }
 }
