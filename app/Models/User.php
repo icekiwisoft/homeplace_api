@@ -22,6 +22,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'is_admin'
     ];
 
     /**
@@ -56,7 +57,18 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return array
      */
+    // public function getJWTCustomClaims() {
+    //     return [];
+    // }  
+    
     public function getJWTCustomClaims() {
-        return [];
-    }    
+        $user = Auth::user();
+    
+        return [
+            'email' => $user->email,
+            'name' => $user->name,
+            'is_admin' => $user->is_admin,
+        ];
+    }
+    
 }

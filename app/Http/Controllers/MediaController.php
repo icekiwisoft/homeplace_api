@@ -18,7 +18,6 @@ class MediaController extends Controller
         $medias = Media::all();
         return MediaResource::collection($medias);
     }
-
     /**
      * Display a listing of the resource.
      */
