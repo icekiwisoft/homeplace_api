@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function index()
     {
 
-        $categories = Category::all();
+        $categories = Category::paginate();
 
         return CategoryResource::collection($categories);
     }

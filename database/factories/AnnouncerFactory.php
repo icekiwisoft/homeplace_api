@@ -18,13 +18,15 @@ class AnnouncerFactory extends Factory
 
      protected $model=Announcer::class;
 
-     
+
     public function definition(): array
     {
         return [
+            'avatar'=>$this->faker->imageUrl(400,300, null,true),
              'name' => $this->faker->name(),
             'phone_number' => $this->faker->phoneNumber(),
-            'email'=>$this->faker->email()
+            'email'=>$this->faker->email(),
+
         ];
     }
 }

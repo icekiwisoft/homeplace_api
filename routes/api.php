@@ -25,7 +25,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //this route handles all request related to home
 Route::name()->group(function () {
 
-
     Route::apiResources([
       'ads'=>AdController::class,
         'categories'=> CategoryController::class ,
@@ -38,7 +37,7 @@ Route::name()->group(function () {
     ]);;
 
     Route::apiResource('medias', MediaController::class);
-  
+
     Route::apiResource('medias.ads', MediaAdController::class)->only([
         "index"
     ]);
@@ -48,7 +47,7 @@ Route::name()->group(function () {
     ]);;
 
 
-    Route::get("/", StatController::class);
+    Route::any("/", StatController::class);
     Route::apiResource('ads.medias', AdMediaController::class)->only([
         "store", "destroy", "index"
     ]);

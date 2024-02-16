@@ -8,7 +8,7 @@ use App\Http\Resources\AnnouncerResource;
 use App\Models\Ad;
 use App\Models\Announcer;
 use App\Models\House;
-
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -17,13 +17,28 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class AdController extends Controller
 {
 
-  
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $ads = Ad::all()->load("announcer");
+        $query = Ad::query();
+
+        if (request('search')) {
+            $query->where(function (Builder $query) {
+                $query->where('description', 'like', '%' . request('search') . '%')
+                ->orWhere('price', 'like', '%' . request('search') . '%');
+            });
+        }
+        if ($request->has(['type']) ) {
+            $query->where('item_type',request('type'));
+        }
+        if ($request->has(['orderBy']) ) {
+            $query->orderBy(request('orderBy'));
+        }
+
+        $ads = $query->paginate(10);
 
         return  Adresource::collection($ads);
     }
@@ -37,6 +52,11 @@ class AdController extends Controller
         $id = $request->input("announcer", null);
         $validated= $request->validated();
        $ad= new Ad($validated);
+       if ($request->hasFile('presention')) {
+        $filename = $ad->id.$request->file("presentation")->getExtension();
+        $savedfile = $request->file("presentation")->storeAs('public/images/presentation', $filename);
+        $ad->presentation_img=$savedfile;
+    }
 
        $announcer=Announcer::findOrFail($validated["announcer_id"]);
        $ad->announcer()->associate($announcer);
@@ -50,10 +70,6 @@ $ad->save();
      */
     public function show(Ad $ad)
     {
-
-        if (!$ad) {
-            throw new NotFoundHttpException('Ad not found');
-        }
         return new Adresource($ad);
     }
 

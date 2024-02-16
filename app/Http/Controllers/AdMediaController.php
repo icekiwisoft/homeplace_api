@@ -33,8 +33,10 @@ class AdMediaController extends Controller
                 $img = new Media();
                $img->file=$file;
                 $img->save();
+                $img->announcer()->associate($ad->announcer);
                 $medias->push($img);
             }
+
             $ad->medias()->syncWithoutDetaching($medias);
             return MediaResource::collection($medias);
         }

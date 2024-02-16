@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('file');
            $table->string('thumbnail');
             $table->string("type")->default("image");
-            $table->string("announcer_id")->nullable();
+            $table->string("announcer_id");
             $table->timestamps();
         });
     }

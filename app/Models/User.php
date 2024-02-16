@@ -11,6 +11,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
+
+const CREATED_AT = 'creation_date';
+const UPDATED_AT = 'updated_date';
+
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -58,5 +62,5 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims() {
         return [];
-    }    
+    }
 }
