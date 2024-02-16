@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('phone_number')->nullable();
             $table->string('email')->nullable();
             $table->string('verified')->default(false);
-
+            $table->string('avatar')->nullable();
             $table->timestamps();
             $table->string('name');
         });

@@ -19,7 +19,7 @@ class MediaFactory extends Factory
     public function definition(): array
     {
         return [
-            'file' => $this->faker->imageUrl(),
+            'file' => $this->faker->imageUrl(400,300, 'ff', true),
             'thumbnail' => $this->faker->imageUrl(),
             'type' => $this->faker->randomElement(["image","video"])
         ];

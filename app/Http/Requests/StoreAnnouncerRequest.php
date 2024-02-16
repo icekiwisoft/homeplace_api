@@ -22,9 +22,8 @@ class StoreAnnouncerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone_number' => ['required', 'max:70'],
+            'phone_number' => [ 'max:70'],
             'name'  => ['required'],
-            'email'  => ['email'],
 
         ];
     }

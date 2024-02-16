@@ -29,6 +29,8 @@ return new class extends Migration
             $table->integer("ad_type")->default(1); //0 for location 1 for sale
             $table->string("announcer_id")->nullable();
             $table->string("category_id")->nullable();
+            $table->string("presentation_img")->nullable();
+
             $table->timestamps();
             $table->text("description")->nullable();
         });

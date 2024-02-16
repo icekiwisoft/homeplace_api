@@ -13,8 +13,6 @@ class MediaSeeder extends Seeder
      */
     public function run(): void
     {
-        Media::factory()->count(30)->forAnnouncer([
-            "name"=>"joyce"
-        ])->create();
+   
     }
 }

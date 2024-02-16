@@ -19,12 +19,12 @@ class AdSeeder extends Seeder
             "name" => "nguewo",
         ])->create();
         $medias= Media::factory()->count(10)->for($announcer);
-        
+
         Ad::factory()
         ->count(20)
         ->state([
             "category_id"=>1
-            
+
         ])
         ->for($announcer)
         ->has($medias,"medias")->create();
