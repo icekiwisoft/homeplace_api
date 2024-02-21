@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Support\Facades\Auth;
+
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -21,8 +23,7 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name',
         'email',
-        'password',
-        'is_admin'
+        'password'
     ];
 
     /**
@@ -62,13 +63,11 @@ class User extends Authenticatable implements JWTSubject
     // }  
     
     public function getJWTCustomClaims() {
-        $user = Auth::user();
-    
+        $user = Auth::this();
         return [
             'email' => $user->email,
             'name' => $user->name,
             'is_admin' => $user->is_admin,
         ];
     }
-    
 }
