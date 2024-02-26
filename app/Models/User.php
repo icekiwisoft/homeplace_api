@@ -63,11 +63,10 @@ class User extends Authenticatable implements JWTSubject
     // }  
     
     public function getJWTCustomClaims() {
-        $user = Auth::this();
         return [
-            'email' => $user->email,
-            'name' => $user->name,
-            'is_admin' => $user->is_admin,
+            'email' => $this->email,
+            'name' => $this->name,
+            'is_admin' => $this->is_admin,
         ];
     }
 }
