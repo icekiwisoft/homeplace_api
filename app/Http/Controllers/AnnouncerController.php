@@ -14,7 +14,7 @@ class AnnouncerController extends Controller
      */
     public function index()
     {
-        $annoncers = Announcer::all();
+        $annoncers = Announcer::paginate(10);
         return AnnouncerResource::collection($annoncers);
     }
 
@@ -23,7 +23,14 @@ class AnnouncerController extends Controller
      */
     public function store(StoreAnnouncerRequest $request)
     {
-        $announcer = Announcer::create($request->validated());
+        $announcer = Announcer::create($request->safe()->except(['avatar']));
+        if ($request->hasFile('avatar')) {
+            $filename = $announcer->id.'.'.$request->file("avatar")->guessClientExtension();
+            $savedfile = $request->file('avatar')->storeAs('public/images', $filename);
+            $announcer->avatar=$savedfile;
+            $announcer->save();
+        }
+
 
         return new AnnouncerResource($announcer);
     }

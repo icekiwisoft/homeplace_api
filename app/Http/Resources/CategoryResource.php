@@ -19,6 +19,7 @@ class CategoryResource extends JsonResource
             "items"=>$this->ads->count(),
             'type'=>$this->type,
             'id'=>$this->id,
+            'creation_date'=>$this->created_at
         ];
     }
 }

@@ -14,6 +14,7 @@ class Ad extends Model
     protected $keyType = 'string';
     use HasFactory , HasUuids;
 
+
     public function newUniqueId(): string
     {
         return (string) Uuid::uuid4();

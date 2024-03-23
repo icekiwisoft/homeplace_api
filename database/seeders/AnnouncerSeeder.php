@@ -10,14 +10,14 @@ use Illuminate\Database\Seeder;
 
 class AnnouncerSeeder extends Seeder
 {
+
+
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Announcer::factory()->count(30)->create();
-         Announcer::factory()->count(20)
-->has(Ad::factory()->count(3)->forCategory(["name"=>"chair"]))
-->create();
+        Announcer::factory()->count(10)->create();
+
     }
 }

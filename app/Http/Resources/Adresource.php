@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class Adresource extends  JsonResource
 {
@@ -20,7 +21,8 @@ class Adresource extends  JsonResource
             'type' => $this->item_type,
             'description' => $this->description,
             'price' => $this->price,
-            'medias'=>MediaResource::collection($this->medias),
+            'medias'=>$this->medias()->count(),
+            'category'=>new CategoryResource($this->category),
             $this->mergeWhen($this->item_type == 0, [
                 'mainroom' => $this->mainroom,
                 'toilet' => $this->toilet,
@@ -34,7 +36,11 @@ class Adresource extends  JsonResource
                 'length' => $this->length,
                 'weight' => $this->weight,
             ]),
-            "announcer" => new AnnouncerResource($this->announcer)
+            "presentation"=>$this->presentation_img?   Storage::url($this->presentation_img):null,
+            "announcer" => new AnnouncerResource($this->announcer),
+            'creation_date'=>$this->created_at,
+
+
         ];
     }
 }
