@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Media;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Media>
@@ -19,9 +20,8 @@ class MediaFactory extends Factory
     public function definition(): array
     {
         return [
-            'file' => $this->faker->imageUrl(400,300, 'ff', true),
-            'thumbnail' => $this->faker->imageUrl(),
-            'type' => $this->faker->randomElement(["image","video"])
+            'file' =>"medias/". $this->faker->image(Storage::path("public/medias"),400,300, null, false),
+            'type' => "image"
         ];
     }
 }
