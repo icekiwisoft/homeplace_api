@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Support\Facades\Auth;
+
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -25,7 +27,7 @@ const UPDATED_AT = 'updated_date';
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'password'
     ];
 
     /**
@@ -60,7 +62,17 @@ const UPDATED_AT = 'updated_date';
      *
      * @return array
      */
+    // public function getJWTCustomClaims() {
+    //     return [];
+    // }  
+    
     public function getJWTCustomClaims() {
-        return [];
+
+        return [
+            'email' => $this->email,
+            'name' => $this->name,
+            'is_admin' => $this->is_admin,
+        ];
+
     }
 }
