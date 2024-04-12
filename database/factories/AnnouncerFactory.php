@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Announcer;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Announcer>
@@ -22,7 +23,7 @@ class AnnouncerFactory extends Factory
     public function definition(): array
     {
         return [
-            'avatar'=>$this->faker->imageUrl(400,300, null,true),
+            'avatar'=>"avatars/".$this->faker->image(Storage::path("public/avatars"),300,300, null,false),
              'name' => $this->faker->name(),
             'phone_number' => $this->faker->phoneNumber(),
             'email'=>$this->faker->email(),
