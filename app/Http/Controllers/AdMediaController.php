@@ -31,7 +31,13 @@ class AdMediaController extends Controller
             $medias = new Collection();
             foreach ($request->medias as $file) {
                 $img = new Media();
-               $img->file=$file;
+                $mimetype = $file->getMimeType();
+                $filename = date("d_m_y") . "---" . $img->file->hashName();
+                $savedfile = $img->file->storeAs('public/medias', $filename);
+                $img->file = $savedfile;
+                $img->type = $mimetype;
+
+
                 $img->save();
                 $img->announcer()->associate($ad->announcer);
                 $medias->push($img);
@@ -44,9 +50,9 @@ class AdMediaController extends Controller
         if ($request->filled("filesid")) {
             $filesid = $request->collect("filesid");
             $attached = $ad->medias()->syncWithoutDetaching($filesid);
-            $medias= Media::whereIn("id", $attached["attached"])->get();
+            $medias = Media::whereIn("id", $attached["attached"])->get();
 
-            return MediaResource::collection($medias) ;
+            return MediaResource::collection($medias);
         }
     }
 
