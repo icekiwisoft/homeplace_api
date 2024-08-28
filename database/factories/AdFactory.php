@@ -21,7 +21,7 @@ class AdFactory extends Factory
         return [
             'item_type' => $this->faker->randomElement([1,0]),
             'price' => $this->faker->numberBetween(5000,20000),
-            'description' => $this->faker->monthName(),
+            'description' => $this->faker->streetName(),
             'presentation_img'=>"images/".$this->faker->image(Storage::path("public/images"),400,300,'animals', false,false,"dogs")
         ];
     }
