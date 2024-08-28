@@ -5,156 +5,224 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use App\Services\TwilioService;
 use Illuminate\Support\Facades\Validator;
+
 
 class AuthController extends Controller
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected $twilioService;
+
+
+    public function __construct(TwilioService $twilioService)
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|string|min:6',
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-        if (!$token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-        return $this->createNewToken($token);
-    }
-    /**
-     * Register a User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
-            'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
-        }
-        $user = User::create(array_merge(
-            $validator->validated(),
-            ['password' => bcrypt($request->password)]
-        ));
-        return response()->json([
-            'message' => 'User successfully registered',
-            'user' => $user
-        ], 201);
+        $this->middleware('auth:api', ['except' => ['login','register','refresh','verifyPhone','resendVerificationCode']]);
+        $this->twilioService = $twilioService;
+
     }
 
-    /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function logout()
-    {
-        auth()->logout();
-        return response()->json(['message' => 'User successfully signed out']);
-    }
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function refresh()
-    {
-        return $this->createNewToken(auth()->refresh());
-    }
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function userProfile()
-    {
-        return response()->json(auth()->user());
-    }
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function createNewToken($token)
-    {
+
+
+
+    public function register(Request $request) {
+        // Validation des champs de la requête
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|unique:users',
+            'phone_number' => 'required|numeric|unique:users',
+            'password' => 'required|string|min:8',
+        ]);
+
+        // Vérifier si la validation échoue
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Générer un code de vérification aléatoire
+        $verificationCode = rand(100000, 999999);
+
+        // Enregistrement de l'utilisateur
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'password' => Hash::make($request->password),
+            'phone_verified' => false,
+        ]);
+
+        // Stocker le code de vérification dans le cache avec une expiration de 10 minutes
+        Cache::put('verification_code_' . $user->id, $verificationCode, now()->addMinutes(10));
+
+        // Envoyer le SMS de vérification
+        $this->twilioService->sendSms($request->phone_number, "Votre code de vérification est {$verificationCode}");
+
+        // Générer un token d'authentification
+        $token = Auth::guard('api')->login($user);
+
+        // Réponse JSON
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => auth()->user()
+            'status' => 'success',
+            'message' => 'Un SMS de vérification a été envoyé.',
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
         ]);
     }
+
+
+    public function resendVerificationCode($user_id)
+    {
+        // $request->validate([
+        //     'user_id' => 'required|exists:users,id',
+        // ]);
+
+        $user = User::find($user_id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
+        }
+
+        // Vérifiez si le numéro de téléphone de l'utilisateur n'est pas déjà vérifié
+        if ($user->phone_verified) {
+            return response()->json(['message' => 'Le numéro de téléphone est déjà vérifié.'], 422);
+        }
+
+        // Générer un nouveau code de vérification
+        $verificationCode = rand(100000, 999999);
+
+        // Stocker le nouveau code de vérification dans le cache avec une expiration de 10 minutes
+        Cache::put('verification_code_' . $user->id, $verificationCode, now()->addMinutes(10));
+
+        // Envoyer le nouveau SMS de vérification
+        $this->twilioService->sendSms($user->phone_number, "Votre nouveau code de vérification est {$verificationCode}");
+
+        return response()->json(['message' => 'Un nouveau SMS de vérification a été envoyé.']);
+    }
+
+    public function verifyPhone(Request $request, $user_id)
+    {
+        $request->validate([
+            'verification_code' => 'required|numeric',
+        ]);
+
+        $user = User::find($user_id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur non trouvé.'], 404);
+        }
+
+        // Récupérer le code de vérification depuis le cache
+        $cachedCode = Cache::get('verification_code_' . $user->id);
+
+        if (!$cachedCode) {
+            return response()->json(['message' => 'Le code de vérification a expiré.'], 422);
+        }
+
+        if ($request->verification_code == $cachedCode) {
+            $user->phone_verified = true;
+            $user->save();
+
+            // Supprimer le code de vérification du cache
+            Cache::forget('verification_code_' . $user->id);
+
+            return response()->json(['message' => 'Vérification réussie, votre compte est activé.']);
+        }
+
+        return response()->json(['message' => 'Code de vérification incorrect.'], 422);
+    }
+
+
+    public function login(Request $request)
+    {
+        // Validation des données
+        $request->validate([
+            'phone_number' => 'nullable|numeric',
+            'email' => 'nullable|string|email',
+            'password' => 'required|string',
+        ]);
+
+        // Détermination des credentials
+        if ($request->has('email')) {
+            $credentials = $request->only('email', 'password');
+        } elseif ($request->has('phone_number')) {
+            $credentials = $request->only('phone_number', 'password');
+        } else {
+            return response()->json(['message' => 'Email ou numéro de téléphone requis.'], 422);
+        }
+
+        // Recherche de l'utilisateur
+        $user = User::where($request->has('email') ? 'email' : 'phone_number', $request->input($request->has('email') ? 'email' : 'phone_number'))->first();
+
+        // Vérification des informations d'identification
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Les informations de connexion sont incorrectes.'], 401);
+        }
+
+        // Vérification du numéro de téléphone
+        if (!$user->phone_verified) {
+            return response()->json(['message' => 'Le numéro de téléphone n\'est pas vérifié.'], 403);
+        }
+
+        // Tentative de connexion
+        $token = Auth::guard('api')->attempt($credentials);
+        if (!$token) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized',
+            ], 401);
+        }
+
+        // Réponse de succès
+        $user = Auth::guard('api')->user();
+        return response()->json([
+            'status' => 'success',
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+        ]);
+    }
+
+
+    public function logout()
+{
+    // Vérifiez si l'utilisateur est authentifié
+    if (!Auth::guard('api')->check()) {
+        return response()->json(['message' => 'Non authentifié.'], 401);
+    }
+
+    // Récupérez l'utilisateur actuellement authentifié
+    $user = Auth::guard('api')->user();
+
+    // Invalider le token actuel (deconnexion)
+    Auth::guard('api')->logout();
+
+    // Réponse de succès
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Déconnexion réussie.',
+    ]);
 }
 
 
-
-
-
-
-
-
-
-    // public function login(Request $request)
-    // {
-    //     if (!Auth::attempt($request->only('email', 'password'))) {
-    //         return response()->json([
-    //             'message' => 'Invalid login details'
-    //         ], 401);
-    //     }
-
-    //     $user = User::where('email', $request['email'])->firstOrFail();
-
-    //     $token = $user->createToken('authToken')->plainTextToken;
-
-    //     return response()->json([
-    //         'access_token' => $token,
-    //         'token_type' => 'Bearer',
-    //     ]);
-    // }
-
-
-    // public function register(Request $request)
-    // {
-    //     $post_data = $request->validate([
-    //         'name' => 'required|string',
-    //         'email' => 'required|string|email|unique:users',
-    //         'password' => 'required|min:8'
-    //     ]);
-
-    //     $user = User::create([
-    //         'name' => $post_data['name'],
-    //         'email' => $post_data['email'],
-    //         'password' => Hash::make($post_data['password']),
-    //     ]);
-
-    //     $token = $user->createToken('authToken')->plainTextToken;
-
-    //     return response()->json([
-    //         'access_token' => $token,
-    //         'token_type' => 'Bearer',
-    //     ]);
-    // }
-//}
+    public function refresh()
+    {
+        return response()->json([
+            'status' => 'success',
+            'user' => Auth::guard('api')->user(),
+            'authorisation' => [
+                'token' => Auth::guard('api')->refresh(),
+                'type' => 'bearer',
+            ]
+        ]);
+    }
+}

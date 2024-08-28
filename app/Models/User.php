@@ -27,7 +27,9 @@ const UPDATED_AT = 'updated_at';
     protected $fillable = [
         'name',
         'email',
-        'password'
+        'password',
+        'phone_number',
+        'phone_verified',
     ];
 
     /**
