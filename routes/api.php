@@ -7,6 +7,8 @@ use App\Http\Controllers\AdMediaController;
 use App\Http\Controllers\AnnouncerAdController;
 use App\Http\Controllers\AnnouncerController;
 use App\Http\Controllers\AnnouncerMediaController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 
@@ -65,12 +67,27 @@ Route::name("newsletter.")->prefix("newsletter")->group(function () {
 });
 });
 
+    Route::post('register/', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login']);
+    Route::middleware('auth:api')->post('logout', [AuthController::class, 'logout']);
 
-Route::post('register/', [AuthController::class, "register"]);
-Route::post('login/', [AuthController::class, "login"]);
-Route::post('/logout', [AuthController::class, 'logout']);
-Route::post('/refresh', [AuthController::class, 'refresh']);
+    // Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('verifyPhone/{user_id}', [AuthController::class, 'verifyPhone']);
+    Route::post('resendVerificationCode/{user_id}', [AuthController::class, 'resendVerificationCode']);
+
+// Route::post('/refresh', [AuthController::class, 'refresh']);
 Route::get('/user-profile', [AuthController::class, 'userProfile']);
+
+
+// Route::post('register/', [AuthController::class, 'register']);
+// Route::post('/verify-phone', [AuthController::class, 'verifyPhone']);
+// Route::post('/resend-verification-code', [AuthController::class, 'resendVerificationCode']);
+// Route::post('/login', [AuthController::class, 'login']);
+// Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+
+
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
