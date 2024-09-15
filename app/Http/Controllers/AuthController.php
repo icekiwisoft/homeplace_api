@@ -193,36 +193,5 @@ class AuthController extends Controller
     }
 
 
-    public function logout()
-{
-    // Vérifiez si l'utilisateur est authentifié
-    if (!Auth::guard('api')->check()) {
-        return response()->json(['message' => 'Non authentifié.'], 401);
-    }
-
-    // Récupérez l'utilisateur actuellement authentifié
-    $user = Auth::guard('api')->user();
-
-    // Invalider le token actuel (deconnexion)
-    Auth::guard('api')->logout();
-
-    // Réponse de succès
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Déconnexion réussie.',
-    ]);
-}
-
-
-    public function refresh()
-    {
-        return response()->json([
-            'status' => 'success',
-            'user' => Auth::guard('api')->user(),
-            'authorisation' => [
-                'token' => Auth::guard('api')->refresh(),
-                'type' => 'bearer',
-            ]
-        ]);
-    }
+ 
 }
