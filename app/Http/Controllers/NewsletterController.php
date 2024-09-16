@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\newsletter;
+use Exception;
 use Illuminate\Http\Request;
 
 

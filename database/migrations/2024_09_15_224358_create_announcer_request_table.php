@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('announcers', function (Blueprint $table) {
-            $table->string("id")->primary();
-            $table->string('verified')->default(false);
-            $table->string('avatar')->nullable();
+        Schema::create('announcer_request', function (Blueprint $table) {
+            $table->id();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('status')->default('pending'); // Default status: pending ,rejected , validated
             $table->timestamps();
-            $table->string('name');
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('announcer');
+        Schema::dropIfExists('announcer_request');
     }
 };

@@ -13,20 +13,16 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    protected $twilioService;
 
-
-    public function __construct(TwilioService $twilioService)
+    public function __construct(protected TwilioService $twilioService)
     {
-        $this->middleware('auth:api', ['except' => ['login','register','refresh','verifyPhone','resendVerificationCode']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'refresh', 'verifyPhone', 'resendVerificationCode']]);
         $this->twilioService = $twilioService;
-
     }
 
 
-
-
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         // Validation des champs de la requête
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -193,5 +189,36 @@ class AuthController extends Controller
     }
 
 
- 
+    public function logout()
+    {
+        // Vérifiez si l'utilisateur est authentifié
+        if (!Auth::guard('api')->check()) {
+            return response()->json(['message' => 'Non authentifié.'], 401);
+        }
+
+        // Récupérez l'utilisateur actuellement authentifié
+        $user = Auth::guard('api')->user();
+
+        // Invalider le token actuel (deconnexion)
+        Auth::guard('api')->logout();
+
+        // Réponse de succès
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Déconnexion réussie.',
+        ]);
+    }
+
+
+    public function refresh()
+    {
+        return response()->json([
+            'status' => 'success',
+            'user' => Auth::guard('api')->user(),
+            'authorisation' => [
+                'token' => Auth::guard('api')->refresh(),
+                'type' => 'bearer',
+            ]
+        ]);
+    }
 }

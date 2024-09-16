@@ -5,38 +5,59 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAnnouncerRequest;
 use App\Http\Resources\AnnouncerResource;
 use App\Models\Announcer;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AnnouncerController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of announcers.
      */
     public function index()
     {
-        $annoncers = Announcer::paginate(10);
-        return AnnouncerResource::collection($annoncers);
+        $announcers = Announcer::paginate(10);
+        return AnnouncerResource::collection($announcers);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created announcer in storage.
      */
     public function store(StoreAnnouncerRequest $request)
     {
-        $announcer = Announcer::create($request->safe()->except(['avatar']));
-        if ($request->hasFile('avatar')) {
-            $filename = $announcer->id.'.'.$request->file("avatar")->guessClientExtension();
-            $savedfile = $request->file('avatar')->storeAs('public/images', $filename);
-            $announcer->avatar=$savedfile;
-            $announcer->save();
+        // Ensure the authenticated user is an admin
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
         }
 
+        $validated = $request->validated();
+
+        // Ensure the provided user_id exists
+        $user = User::find($validated['user_id']);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        // Create the announcer for the chosen user
+        $announcer = Announcer::create($validated);
+
+        // Handle the avatar file if provided
+        if ($request->hasFile('avatar')) {
+            $request->validate([
+                'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+
+            $filename = $announcer->id . '.' . $request->file('avatar')->guessExtension();
+            $savedFile = $request->file('avatar')->storeAs('public/images', $filename);
+            $announcer->avatar = Storage::url($savedFile);
+            $announcer->save();
+        }
 
         return new AnnouncerResource($announcer);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified announcer.
      */
     public function show(Announcer $announcer)
     {
@@ -44,25 +65,62 @@ class AnnouncerController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified announcer in storage.
      */
     public function update(Request $request, Announcer $announcer)
     {
-        $announcer->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone_number' => $request->phone
+        // Ensure the authenticated user is an admin
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'avatar' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        return response()->json();
+        // Ensure the new user exists if user_id is being updated
+        if (isset($validated['user_id'])) {
+            $user = User::find($validated['user_id']);
+            if (!$user) {
+                return response()->json(['error' => 'User not found'], 404);
+            }
+        }
+
+        // Update the announcer details
+        $announcer->update($validated);
+
+        // Handle avatar update if a new file is provided
+        if ($request->hasFile('avatar')) {
+            if ($announcer->avatar) {
+                Storage::delete(str_replace('/storage/', 'public/', $announcer->avatar));
+            }
+
+            $filename = $announcer->id . '.' . $request->file('avatar')->guessExtension();
+            $savedFile = $request->file('avatar')->storeAs('public/images', $filename);
+            $announcer->avatar = Storage::url($savedFile);
+            $announcer->save();
+        }
+
+        return new AnnouncerResource($announcer);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified announcer from storage.
      */
     public function destroy(Announcer $announcer)
     {
+        // Ensure the authenticated user is an admin
+        if (!request()->user()->isAdmin()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        if ($announcer->avatar) {
+            Storage::delete(str_replace('/storage/', 'public/', $announcer->avatar));
+        }
+
         $announcer->delete();
-        return Response()->json(null, 200);
+
+        return response()->json(null, 204);
     }
 }

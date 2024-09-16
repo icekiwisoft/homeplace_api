@@ -6,18 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Announcer extends Model
 {
     use HasFactory;
-
-
-
     public $incrementing = false;
     protected $fillable = [
         'name',
-        'phone_number',
-        'email'
+        'user_id'
     ];
 
     public function ads(): HasMany
@@ -31,5 +28,10 @@ class Announcer extends Model
     {
 
         return $this->hasMany(Media::class);
+    }
+
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class);
     }
 }

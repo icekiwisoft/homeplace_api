@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Ramsey\Uuid\Uuid;
 
 class Ad extends Model
 {
     protected $keyType = 'string';
-    use HasFactory , HasUuids;
+    use HasFactory, HasUuids;
 
 
     public function newUniqueId(): string
@@ -43,8 +44,20 @@ class Ad extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function unlockings()
+    {
+        return $this->hasMany(Unlocking::class);
+    }
+
+
     public function medias(): BelongsToMany
     {
         return $this->belongsToMany(Media::class);
+    }
+
+    public function favorites(): HasMany
+    {
+
+        return $this->hasMany(Favorite::class);
     }
 }
