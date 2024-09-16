@@ -16,6 +16,7 @@ use App\Http\Controllers\MediaAdController;
 use App\Http\Controllers\MediaController;
 
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\passwordResetRequestController;
 use App\Http\Controllers\StatController;
 
 
@@ -64,6 +65,8 @@ Route::name("newsletter.")->prefix("newsletter")->group(function () {
 
         Route::get("/", [NewsletterController::class, "index"]);
         Route::post("/", [NewsletterController::class, "store"]);
+
+
 });
 });
 
@@ -80,11 +83,11 @@ Route::name("newsletter.")->prefix("newsletter")->group(function () {
 Route::get('/user-profile', [AuthController::class, 'userProfile']);
 
 
-// Route::post('register/', [AuthController::class, 'register']);
-// Route::post('/verify-phone', [AuthController::class, 'verifyPhone']);
-// Route::post('/resend-verification-code', [AuthController::class, 'resendVerificationCode']);
-// Route::post('/login', [AuthController::class, 'login']);
-// Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('sendEmail/', [passwordResetRequestController::class, 'sendResetLinkEmail']);
+Route::post('resetPassword/', [passwordResetRequestController::class, 'resetPassword']);
+
+Route::middleware('auth:api')->post('changePassword/', [passwordResetRequestController::class, 'changePassword']);
+// Route::post('changePassword/', [passwordResetRequestController::class, 'changePassword'])->middleware('auth:sanctum');
 
 
 
