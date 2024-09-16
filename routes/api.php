@@ -16,6 +16,7 @@ use App\Http\Controllers\MediaAdController;
 use App\Http\Controllers\MediaController;
 
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\passwordResetRequestController;
 use App\Http\Controllers\StatController;
 use App\Http\Controllers\SubscriptionsController;
 
@@ -52,14 +53,45 @@ Route::apiResource('newsletters', NewsletterController::class);
 // Authentication routes
 Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
-    Route::post('login', [AuthController::class, 'login']);
+    Route::apiResource('announcers.ads', AnnouncerAdController::class)->only([
+        "index",
+    ]);;
 
-    Route::middleware('auth:api')->group(function () {
-        Route::post('logout', [AuthController::class, 'logout']);
-        Route::get('me', [AuthController::class, 'userProfile']);
+    Route::apiResource('medias', MediaController::class);
+
+    Route::apiResource('medias.ads', MediaAdController::class)->only([
+        "index"
+    ]);
+
+    Route::apiResource('announcers.medias', AnnouncerMediaController::class)->only([
+        "index",
+    ]);;
+
+
+    Route::any("/", StatController::class);
+    Route::apiResource('ads.medias', AdMediaController::class)->only([
+        "store",
+        "destroy",
+        "index"
+    ]);
+});
+
+
+
+
+Route::name("newsletter.")->prefix("newsletter")->group(function () {
+    Route::middleware("auth")->group(function () {
+
+        Route::get("/", [NewsletterController::class, "index"]);
+        Route::post("/", [NewsletterController::class, "store"]);
     });
+});
 
-    Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+    Route::post('register/', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login']);
+    Route::middleware('auth:api')->post('logout', [AuthController::class, 'logout']);
+
+    // Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('verifyPhone/{user_id}', [AuthController::class, 'verifyPhone']);
     Route::post('resendVerificationCode/{user_id}', [AuthController::class, 'resendVerificationCode']);
