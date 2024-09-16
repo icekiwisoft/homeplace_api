@@ -2,62 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ad;
 use App\Models\Favorite;
 use Illuminate\Http\Request;
 
 class FavoriteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    //ad ad to favorite
+    public function addToFavorites(Request $request, Ad $ad)
     {
-        $favorites = Favorite::all();
-        return response()->json($favorites);
+        $user = $request->user();
+
+        // Check if already added
+        if ($user->favorites()->where('ad_id', $ad->id)->exists()) {
+            return response()->json(['message' => 'Ad is already in your favorites'], 400);
+        }
+
+        // Add to favorites
+        $user->favorites()->attach($ad->id);
+
+        return response()->json(['message' => 'Ad added to favorites successfully'], 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'ads_id' => 'required|exists:ads,id',
-        ]);
-
-        $favorite = Favorite::create([
-            'user_id' => $request->user_id,
-            'ads_id' => $request->ads_id,
-        ]);
-
-        return response()->json($favorite, 201);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Favorite $favorite)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Favorite $favorite)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Favorite $favorite)
+    public function removeFromFavorites(Request $request, Ad $ad)
     {
-        $favorite = Favorite::findOrFail($id);
-        $favorite->delete();
+        $user = $request->user();
 
-        return response()->json(null, 204);
+        // Check if the ad is already in the user's favorites
+        if (!$user->favorites()->where('ad_id', $ad->id)->exists()) {
+            return response()->json(['message' => 'Ad is not in your favorites'], 400);
+        }
+
+        // Remove from favorites
+        $user->favorites()->detach($ad->id);
+
+        return response()->json(['message' => 'Ad removed from favorites successfully'], 200);
     }
 }

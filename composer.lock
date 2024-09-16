@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3aed42839a44f1b1b81b2158d1a6e147",
+    "content-hash": "3a6cd73e9af9c0df6836c8cb0dc025a7",
     "packages": [
         {
             "name": "brick/math",
@@ -6092,16 +6092,16 @@
         },
         {
             "name": "twilio/sdk",
-            "version": "8.2.2",
+            "version": "8.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twilio/twilio-php.git",
-                "reference": "10dbd6ecbc6ac1e0c61ab7d70c44e0794f8d3a1f"
+                "reference": "da842421814abaacb1c57eaacd7e8de19bbdbee6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/10dbd6ecbc6ac1e0c61ab7d70c44e0794f8d3a1f",
-                "reference": "10dbd6ecbc6ac1e0c61ab7d70c44e0794f8d3a1f",
+                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/da842421814abaacb1c57eaacd7e8de19bbdbee6",
+                "reference": "da842421814abaacb1c57eaacd7e8de19bbdbee6",
                 "shasum": ""
             },
             "require": {
@@ -6139,9 +6139,9 @@
             ],
             "support": {
                 "issues": "https://github.com/twilio/twilio-php/issues",
-                "source": "https://github.com/twilio/twilio-php/tree/8.2.2"
+                "source": "https://github.com/twilio/twilio-php/tree/8.3.0"
             },
-            "time": "2024-07-02T09:32:09+00:00"
+            "time": "2024-09-05T13:01:28+00:00"
         },
         {
             "name": "tymon/jwt-auth",

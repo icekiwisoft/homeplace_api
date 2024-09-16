@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->string('phone_number')->unique();
             $table->boolean('phone_verified')->default(false);
-
+            $table->boolean('is_admin')->default(false);
 
             $table->rememberToken();
             $table->timestamps();
@@ -32,16 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Schema::dropIfExists('users');
-
-        Schema::table('users', function (Blueprint $table) {
-        $table->dropColumn('phone_number');
-        $table->dropColumn('password');
-        $table->dropColumn('phone_verified');
-        $table->dropColumn('email');
-        $table->dropColumn('name');
-    });
-
-
+        Schema::dropIfExists('users');
     }
 };

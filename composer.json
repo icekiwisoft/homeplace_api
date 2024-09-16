@@ -12,7 +12,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "php-open-source-saver/jwt-auth": "^2.3",
-        "twilio/sdk": "^8.2",
+        "twilio/sdk": "^8.3",
         "tymon/jwt-auth": "^2.0"
     },
     "require-dev": {

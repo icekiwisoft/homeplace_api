@@ -17,10 +17,8 @@ class CategoryController extends Controller
     {
 
         $categories = Category::paginate();
-
         return CategoryResource::collection($categories);
     }
-
 
     /**
      * Store a newly created resource in storage.

@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -14,10 +17,10 @@ use Illuminate\Support\Facades\Auth;
 class User extends Authenticatable implements JWTSubject
 {
 
-const CREATED_AT = 'created_at';
-const UPDATED_AT = 'updated_at';
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -51,12 +54,13 @@ const UPDATED_AT = 'updated_at';
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-     /**
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
      */
-    public function getJWTIdentifier() {
+    public function getJWTIdentifier()
+    {
         return $this->getKey();
     }
     /**
@@ -68,13 +72,29 @@ const UPDATED_AT = 'updated_at';
     //     return [];
     // }
 
-    public function getJWTCustomClaims() {
+    public function getJWTCustomClaims()
+    {
 
         return [
             'email' => $this->email,
             'name' => $this->name,
             'is_admin' => $this->is_admin,
         ];
+    }
 
+    public function unlockedAds()
+    {
+        return $this->hasMany(Unlocking::class);
+    }
+
+    public function announcer(): HasOne
+    {
+        return $this->hasOne(Announcer::class);
+    }
+
+    public function favorites(): HasMany
+    {
+
+        return $this->hasMany(Favorite::class);
     }
 }

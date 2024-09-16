@@ -39,6 +39,8 @@ class Adresource extends  JsonResource
             "presentation"=>$this->presentation_img?   Storage::url($this->presentation_img):null,
             "announcer" => new AnnouncerResource($this->announcer),
             'creation_date'=>$this->created_at,
+            'liked'=>false
+
 
 
         ];
