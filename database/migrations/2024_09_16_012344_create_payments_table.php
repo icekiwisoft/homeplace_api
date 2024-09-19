@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Associate payment with a user
             $table->enum('payment_type', ['subscription', 'ad_unlock', 'other'])->default('other'); // Type of payment
             $table->unsignedBigInteger('reference_id')->nullable(); // Reference to subscription, ad unlock, or other entity
@@ -22,7 +21,6 @@ return new class extends Migration
             $table->string('payment_id')->unique(); // External payment processor ID
             $table->enum('status', ['pending', 'completed', 'failed']);
             $table->timestamps();
-
         });
     }
 

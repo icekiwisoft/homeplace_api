@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('announcer_media', function (Blueprint $table) {
             $table->uuid("media_id");
-            $table->string("announcer_id");
+            $table->string("announcer_id")->constrained("ads")->onDelete('cascade');
             $table->id();
             $table->timestamps();
         });
