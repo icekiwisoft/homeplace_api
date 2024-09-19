@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('announcer_request', function (Blueprint $table) {
+        Schema::create('announcer_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignId('user_id')->constrained()->on('users');
             $table->string('status')->default('pending'); // Default status: pending ,rejected , validated
             $table->timestamps();
         });

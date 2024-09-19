@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('unlockings', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained("users")->onDelete('cascade');
-            $table->foreignId('house_id')->constrained('ads')->onDelete('cascade'); // Assuming there's a houses table
+            $table->id();
+            $table->string('ad_id')->constrained()->on('ads')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->on('users')->onDelete('cascade');
             $table->timestamp('unlocked_at');
             $table->timestamp('expires_at');
+            $table->timestamps();
         });
     }
 

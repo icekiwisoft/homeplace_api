@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('favorites', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('ad_id')->constrained()->onDelete('cascade');
+            $table->string('ad_id')->constrained("ads")->onDelete('cascade');
             $table->timestamps();
         });
     }
