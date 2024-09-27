@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('ad_id')->constrained()->on('ads')->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->on('users')->onDelete('cascade');
-            $table->timestamp('unlocked_at');
-            $table->timestamp('expires_at');
+            $table->date('unlocked_at')->nullable();
+            $table->date('expires_at')->nullable();
             $table->timestamps();
         });
     }

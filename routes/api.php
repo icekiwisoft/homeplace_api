@@ -39,7 +39,7 @@ Route::apiResource('announcers.medias', AnnouncerMediaController::class)->only('
 Route::apiResource('ads.medias', AdMediaController::class)->only(['store', 'destroy', 'index']);
 
 //some global information  route
-Route::any('/', [StatController::class, 'index']);
+Route::any('/', StatController::class);
 
 
 // Favorite management
