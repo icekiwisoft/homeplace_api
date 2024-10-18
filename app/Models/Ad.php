@@ -15,24 +15,20 @@ class Ad extends Model
     protected $keyType = 'string';
     use HasFactory, HasUuids;
 
+    protected $fillable = ['price', 'ad_type', 'announcer_id', 'category_id', 'presentation_img', 'description', 'item_type'];
+
+    // Relation polymorphique
+    public function adable()
+    {
+        return $this->morphTo(__FUNCTION__, 'item_type', 'ad_id');
+    }
+
 
     public function newUniqueId(): string
     {
         return (string) Uuid::uuid4();
     }
-    protected $fillable = [
-        'price',
-        'description',
-        'mainroom',
-        'toilet',
-        'kitchen',
-        'mainroom',
-        'item_type',
-        'height',
-        'width',
-        'length',
-        'weight'
-    ];
+
 
     public function announcer(): BelongsTo
     {

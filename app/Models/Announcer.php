@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -14,7 +15,8 @@ class Announcer extends Model
     public $incrementing = false;
     protected $fillable = [
         'name',
-        'user_id'
+        'user_id',
+        'verified'
     ];
 
     public function ads(): HasMany
@@ -30,8 +32,8 @@ class Announcer extends Model
         return $this->hasMany(Media::class);
     }
 
-    public function user(): HasOne
+    public function user(): BelongsTo
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 }

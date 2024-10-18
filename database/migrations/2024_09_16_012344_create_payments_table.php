@@ -12,14 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Associate payment with a user
-            $table->enum('payment_type', ['subscription', 'ad_unlock', 'other'])->default('other'); // Type of payment
+            $table->enum('payment_type', ['subscription'])->default('subscription'); // Type of payment
             $table->unsignedBigInteger('reference_id')->nullable(); // Reference to subscription, ad unlock, or other entity
             $table->string('payment_method');
+            $table->string('payment_info');
+            $table->string('payment_type_info');
             $table->decimal('amount', 10, 2);
-            $table->string('payment_id')->unique(); // External payment processor ID
-            $table->enum('status', ['pending', 'completed', 'failed']);
+            $table->string('payment_id')->unique()->nullable(); // External payment processor ID
+            $table->enum('status', ['pending', 'completed', 'failed'])->default("pending");
             $table->timestamps();
         });
     }

@@ -41,7 +41,7 @@ class NewsletterController extends Controller
             // Create new subscription
             $mail = new Newsletter();
             $mail->email = $request->email;
-            $mail->verification_token = Str::random(60);
+            $mail->verification_token = Str::uuid();
             $mail->save();
 
             // Send verification email

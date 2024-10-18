@@ -14,6 +14,7 @@ class NewsletterSubscription extends Mailable
     use Queueable, SerializesModels;
 
     public $mail;
+    public $verification_url;
 
     /**
      * Create a new message instance.
@@ -23,6 +24,7 @@ class NewsletterSubscription extends Mailable
     public function __construct(Newsletter $mail)
     {
         $this->mail = $mail;
+        $this->verification_url = url("/newsletter/" . $mail->verification_token);
     }
 
     /**

@@ -11,7 +11,7 @@ class StoreSubscriptionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StoreSubscriptionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "plan_name" => "string|required",
+            "method" => "string|required",
+            "payment_info" => "string|required"
         ];
     }
 }
