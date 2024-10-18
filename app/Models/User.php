@@ -92,6 +92,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Announcer::class);
     }
 
+    public function announcerRequest(): HasOne
+    {
+        return $this->hasOne(AnnouncerRequest::class);
+    }
+
     public function favorites(): HasMany
     {
 

@@ -10,9 +10,13 @@ class Subscription extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'type' ,//premium , standart, etc,
-        'credit',
-        'validity',
+        'credits',
+        'duration',
+        'subscription_plan_id',
+        'user_id',
+        'price',
+        'expire_at',
+        'initial_credits',
     ];
 
 
@@ -21,13 +25,13 @@ class Subscription extends Model
         return $this->belongsTo(User::class);
     }
 
-        /**
+    /**
      * Scope to get active subscriptions (not expired and with credits).
      */
     public function scopeActive($query)
     {
         return $query->where('expires_at', '>', now())
-                     ->where('credits', '>', 0);
+            ->where('credits', '>', 0);
     }
 
     /**
@@ -41,4 +45,9 @@ class Subscription extends Model
         }
     }
 
+
+    public function subscription_plan(): BelongsTo
+    {
+        return $this->belongsTo(SubscriptionPlan::class);
+    }
 }

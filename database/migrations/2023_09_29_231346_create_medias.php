@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('media', function (Blueprint $table) {
             $table->uuid("id")->primary();
+            $table->softDeletes();
             $table->string('file');
-           $table->string('thumbnail');
+            $table->string('thumbnail');
             $table->string("type")->default("image");
             $table->string("announcer_id");
             $table->timestamps();

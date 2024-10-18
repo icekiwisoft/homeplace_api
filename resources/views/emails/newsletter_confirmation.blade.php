@@ -8,7 +8,7 @@
     <p>Hello,</p>
     <p>You have subscribed to our newsletter with the email: {{ $mail->email }}.</p>
     <p>Please click the link below to confirm your subscription:</p>
-    <a href="{{ $verificationUrl }}">Confirm Subscription</a>
+    <a href="{{ $verification_url }}">Confirm Subscription</a>
     <p>Best regards,<br>Domilix</p>
 </body>
 </html>

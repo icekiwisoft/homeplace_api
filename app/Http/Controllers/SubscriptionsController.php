@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreSubscriptionRequest;
 use App\Models\Subscription;
 use App\Models\SubscriptionPlan;
 use App\Services\PaymentService;
@@ -26,32 +27,11 @@ class SubscriptionsController extends Controller
     /**
      * Subscribe a user to a plan.
      */
-    public function store(Request $request)
+    public function store(StoreSubscriptionRequest $request)
     {
 
-        $this->paymentService->processPayment("672005934", 20, 8, "mtn");
-        $validated = $request->validate([
-            'plan_name' => 'required|string|exists:subscription_plans,name',
-        ]);
-
-        $user = $request->user();
-
-        // Retrieve the subscription plan by name
-        $subscriptionPlan = SubscriptionPlan::where('name', $validated['plan_name'])->firstOrFail();
-
-        // Create a new subscription for the user
-
-
-        $subscription = Subscription::create([
-            'user_id' => $user->id,
-            'plan_id' => $subscriptionPlan->id,
-            'credits' => $this->getCreditsForPlan($subscriptionPlan->name),
-            'price' => $this->getPriceForPlan($subscriptionPlan->name),
-            'duration' => $this->getDurationForPlan($subscriptionPlan->name),
-            'expires_at' => now()->addDays($this->getDurationForPlan($subscriptionPlan->name)),
-        ]);
-
-        return response()->json(['message' => 'Subscription successful', 'subscription' => $subscription], 201);
+        $validated = $request->validated();
+        return  $this->paymentService->processPayment($validated["payment_info"], $validated["plan_name"], $validated["method"]);
     }
 
     /**
@@ -78,62 +58,5 @@ class SubscriptionsController extends Controller
         $subscription->delete();
 
         return response()->json(['message' => 'Subscription cancelled successfully'], 200);
-    }
-
-    /**
-     * Get credits based on the subscription plan name.
-     */
-    private function getCreditsForPlan($planName)
-    {
-        switch ($planName) {
-            case 'Standard':
-                return 20;
-            case 'Avantage':
-                return 50;
-            case 'Premium':
-                return 100;
-            case 'Ultime':
-                return 250;
-            default:
-                return 0;
-        }
-    }
-
-    /**
-     * Get price based on the subscription plan name.
-     */
-    private function getPriceForPlan($planName)
-    {
-        switch ($planName) {
-            case 'Standard':
-                return 10.00;
-            case 'Avantage':
-                return 25.00;
-            case 'Premium':
-                return 45.00;
-            case 'Ultime':
-                return 90.00;
-            default:
-                return 0.00;
-        }
-    }
-
-    /**
-     * Get duration in days based on the subscription plan name.
-     */
-    private function getDurationForPlan($planName)
-    {
-        switch ($planName) {
-            case 'Standard':
-                return 3;
-            case 'Avantage':
-                return 7;
-            case 'Premium':
-                return 14;
-            case 'Ultime':
-                return 30;
-            default:
-                return 0;
-        }
     }
 }

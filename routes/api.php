@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AdController;
@@ -14,14 +13,13 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\MediaAdController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\UsersController;
 
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\passwordResetRequestController;
 use App\Http\Controllers\StatController;
 use App\Http\Controllers\SubscriptionsController;
-
-
-
+use App\Http\Controllers\WebhooksController;
 
 // Define API resource routes
 Route::apiResources([
@@ -29,7 +27,13 @@ Route::apiResources([
     'categories' => CategoryController::class,
     'announcers' => AnnouncerController::class,
     'medias' => MediaController::class,
+    'users' => UsersController::class,
+    'announcer-requests' => AnnouncerRequestsController::class,
+
 ]);
+
+
+Route::patch('users/{user}/become-announcer', [UsersController::class, 'becomeAnnouncer']);
 
 // Define nested API resource routes
 Route::apiResource('announcers.ads', AnnouncerAdController::class)->only('index');
@@ -46,9 +50,15 @@ Route::any('/', StatController::class);
 Route::patch('ads/{ad}/like', [FavoriteController::class, 'addToFavorites']);
 Route::patch('ads/{ad}/unlike', [FavoriteController::class, 'removeFromFavorites']);
 
-// Announcer requests and newsletters
-Route::apiResource('requests', AnnouncerRequestsController::class);
+
 Route::apiResource('newsletters', NewsletterController::class);
+Route::get('newsletter/{token}', [NewsletterController::class, 'verify']);
+
+
+Route::prefix('webhooks')->group(function () {
+    Route::get('campay', [WebhooksController::class, 'campay']);
+});
+
 
 // Authentication routes
 Route::prefix('auth')->group(function () {
@@ -65,14 +75,8 @@ Route::prefix('auth')->group(function () {
     Route::post('verifyPhone/{user_id}', [AuthController::class, 'verifyPhone']);
     Route::post('resendVerificationCode/{user_id}', [AuthController::class, 'resendVerificationCode']);
 
-    // Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);
-
-
     Route::post('sendEmail/', [passwordResetRequestController::class, 'sendResetLinkEmail']);
     Route::post('resetPassword/', [passwordResetRequestController::class, 'resetPassword']);
 
     Route::post('changePassword/', [passwordResetRequestController::class, 'changePassword']);
-    // Route::post('changePassword/', [passwordResetRequestController::class, 'changePassword'])->middleware('auth:sanctum');
-
 });

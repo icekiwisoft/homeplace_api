@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -13,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->softDeletes();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -25,6 +28,34 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+
+        User::create([
+            "name" => "domilix",
+            "password" => Hash::make("domilix2024"),
+            "phone_number" => "+237698555511",
+            "phone_verified" => true,
+            "email" => "announcer@domilix.com",
+            "is_admin" => true
+        ]);
+
+        User::create([
+            "name" => "nguewo fossong christian",
+            "password" => Hash::make("nguewo"),
+            "phone_number" => "+237696555511",
+            "phone_verified" => true,
+            "email" => "ngdream1953@gmail.com",
+            "is_admin" => true
+        ]);
+
+        User::create([
+            "name" => "kinkeu demessong frank",
+            "password" => Hash::make("kinkeu"),
+            "phone_number" => "+237697555511",
+            "phone_verified" => true,
+            "email" => "kinkeufrank@gmail.com",
+            "is_admin" => true
+        ]);
     }
 
     /**

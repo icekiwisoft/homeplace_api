@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\SubscriptionPlan;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,6 +17,12 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name');
         });
+
+        // Insert default subscription plans using the model
+        SubscriptionPlan::create(['name' => 'Standart']);
+        SubscriptionPlan::create(['name' => 'Advantage']);
+        SubscriptionPlan::create(['name' => 'Premium']);
+        SubscriptionPlan::create(['name' => 'Ultimate']);
     }
 
     /**

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('announcer_media', function (Blueprint $table) {
-            $table->uuid("media_id");
-            $table->string("announcer_id")->constrained("ads")->onDelete('cascade');
+            $table->string("media_id")->constrained("medias")->onDelete('cascade');
+            $table->string("announcer_id")->constrained("announcers")->onDelete('cascade');
             $table->id();
             $table->timestamps();
         });

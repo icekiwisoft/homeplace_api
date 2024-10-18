@@ -14,13 +14,15 @@ return new class extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->unsignedBigInteger('subscription_plan_id');
-            $table->foreign('subscription_plan_id')->references('id')->on('subscription_plans');
+            $table->unsignedBigInteger('user_id')->constrainted()->on('users');
+            $table->string('subscription_plan_id')->constrained()->on('subscription_plans');
             $table->decimal('price',  10, 2);
-            $table->integer('duration_in_days')->default(10);
+            $table->integer('duration')->default(10);
             $table->integer('initial_credits')->default(10);
-            $table->string('status')->default('active');
-            $table->date('start_date');
+            $table->integer('credits')->default(10);
+            $table->timestamp('expire_at');
+            // $table->string('status')->default('active');
+            $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
         });
     }

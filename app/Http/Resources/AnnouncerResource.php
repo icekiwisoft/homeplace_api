@@ -17,14 +17,13 @@ class AnnouncerResource extends JsonResource
     {
         return [
             'name' => $this->name,
-            'email'=> $this->email,
-            'contact'=> $this->phone_number,
-            'id'=>$this->id,
-            'avatar'=>$this->avatar?   Storage::url($this->avatar):null,
-            'creation_date'=>$this->created_at,
-            'bio'=>$this->bio,
-            'verified'=>$this->verified,
-            'furnitures'=>$this->whenLoaded("furnitures"),
+            'user' => new UserResource($this->user),
+            'id' => $this->id,
+            'avatar' => $this->avatar ?   Storage::url($this->avatar) : null,
+            'creation_date' => $this->created_at,
+            'bio' => $this->bio,
+            'verified' => (bool) $this->verified,
+            'furnitures' => $this->whenLoaded("furnitures"),
 
         ];
     }

@@ -13,23 +13,14 @@ return new class extends Migration
     {
         Schema::create('ads', function (Blueprint $table) {
             $table->string("id")->primary();
-            $table->integer("item_type")->default(0); //0 for house and 1 for furniture
+            $table->string("item_type");
 
-            $table->integer("price")->default(0);
-            $table->integer("toilet")->unsigned()->nullable();
-            $table->integer("kitchen")->unsigned()->nullable();
-            $table->integer("height")->unsigned()->nullable();
-            $table->integer("width")->unsigned()->nullable();
-            $table->integer("length")->unsigned()->nullable();
-            $table->integer("weight")->unsigned()->nullable();
+            $table->float("price")->default(0);
 
-
-            $table->integer("bedroom")->unsigned()->default(0);
-            $table->integer("mainroom")->unsigned()->default(0);
-            $table->integer("ad_type")->default(1); //0 for location 1 for sale
+            $table->boolean("ad_type"); //0 for sell and 1 for location
+            $table->unsignedBigInteger("ad_id");
             $table->string("announcer_id")->nullable();
             $table->string("category_id")->nullable();
-            $table->string("presentation_img")->nullable();
 
             $table->timestamps();
             $table->text("description")->nullable();
