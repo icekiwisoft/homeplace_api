@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('duration')->default(10);
             $table->integer('initial_credits')->default(10);
             $table->integer('credits')->default(10);
-            $table->timestamp('expire_at');
+            $table->timestamp('expire_at')->nullable();
             // $table->string('status')->default('active');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
