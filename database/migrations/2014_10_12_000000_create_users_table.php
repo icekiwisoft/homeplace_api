@@ -20,10 +20,38 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-
+            $table->enum("sex", ["m", "f"])->default("m");
+            $table->dateTime("birthday")->nullable();
             $table->string('phone_number')->unique();
             $table->boolean('phone_verified')->default(false);
             $table->boolean('is_admin')->default(false);
+
+            // Added devise enum with all major currencies, defaulting to XOF (Franc CFA)
+            $table->enum('devise', [
+                'USD',
+                'EUR',
+                'GBP',
+                'XOF',
+                'XAF',
+                'NGN',
+                'KES',
+                'GHS',
+                'ZAR',
+                'JPY',
+                'CNY',
+                'INR',
+                'BRL',
+                'RUB',
+                'CAD',
+                'AUD',
+                'CHF',
+                'SGD',
+                'NZD',
+                'MXN',
+                'TRY',
+                'AED',
+                'SAR'
+            ])->default('XOF');
 
             $table->rememberToken();
             $table->timestamps();

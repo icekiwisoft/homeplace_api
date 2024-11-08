@@ -10,7 +10,7 @@ class MediaController extends Controller
 
     public function index()
     {
-        $medias = Media::all();
+        $medias = Media::paginate(15);
         return MediaResource::collection($medias);
     }
     /**

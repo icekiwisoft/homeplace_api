@@ -8,14 +8,33 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Uuid;
 
 class Ad extends Model
 {
-    protected $keyType = 'string';
+    use SoftDeletes;
+
     use HasFactory, HasUuids;
 
-    protected $fillable = ['price', 'ad_type', 'announcer_id', 'category_id', 'presentation_img', 'description', 'item_type'];
+
+
+    public function uniqueIds(): array
+    {
+        return ['client_id'];
+    }
+
+    protected $fillable = [
+        'price',
+        'ad_type',
+        'announcer_id',
+        'category_id',
+        'presentation_img',
+        'description',
+        'item_type',
+        'devise',
+        'period'
+    ];
 
     // Relation polymorphique
     public function adable()
@@ -53,7 +72,6 @@ class Ad extends Model
 
     public function favorites(): HasMany
     {
-
         return $this->hasMany(Favorite::class);
     }
 }

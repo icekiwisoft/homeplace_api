@@ -16,14 +16,17 @@ class AnnouncerResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'user' => new UserResource($this->user),
-            'id' => $this->id,
             'avatar' => $this->avatar ?   Storage::url($this->avatar) : null,
             'creation_date' => $this->created_at,
             'bio' => $this->bio,
             'verified' => (bool) $this->verified,
-            'furnitures' => $this->whenLoaded("furnitures"),
+            'realestates' => $this->whenLoaded("furnitures"),
+            'furnitures' => "",
+            'state' => null
+
 
         ];
     }

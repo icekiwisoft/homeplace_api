@@ -13,7 +13,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->ulid("id");
+            $table->id();
+            $table->uuid("client_id");
+
             $table->timestamps();
             $table->integer("type")->default(0); // 0 for house, 1 for furniture
             $table->string('name')->unique();

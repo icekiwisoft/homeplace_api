@@ -8,16 +8,16 @@ use App\Models\Ad;
 use App\Models\Media;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class AdMediaController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
     public function index(Ad $ad)
     {
-        $medias = $ad->medias()->get();
+        $medias = $ad->medias()->paginate(15);
         return MediaResource::collection($medias);
     }
 
@@ -26,7 +26,6 @@ class AdMediaController extends Controller
      */
     public function store(Request $request, Ad $ad)
     {
-
         if ($request->hasFile("medias")) {
             $medias = new Collection();
             foreach ($request->medias as $file) {
@@ -36,8 +35,6 @@ class AdMediaController extends Controller
                 $savedfile = $img->file->storeAs('public/medias', $filename);
                 $img->file = $savedfile;
                 $img->type = $mimetype;
-
-
                 $img->save();
                 $img->announcer()->associate($ad->announcer);
                 $medias->push($img);

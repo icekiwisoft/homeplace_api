@@ -13,15 +13,26 @@ return new class extends Migration
     {
         Schema::create('real_estates', function (Blueprint $table) {
             $table->id();
+            $table->softDeletes();
             $table->integer("toilet")->unsigned()->default(0);
             $table->integer("kitchen")->unsigned()->default(0);
             $table->integer("bedroom")->unsigned()->default(0);
             $table->integer("mainroom")->unsigned()->default(0);
+
+            $table->boolean("gate")->default(false);
+            $table->boolean("furnished")->default(false);
+            $table->boolean("pool")->default(false);
+            $table->boolean("garden")->default(false);
+            $table->boolean("garage")->default(false);
+
             $table->float("lng")->nullable();
             $table->float("lat")->nullable();
+
             $table->float("caution")->nullable();
-            $table->boolean("barrier")->default(false);
-            $table->boolean("garage")->default(false);
+
+            $table->enum("standing", ["standart", "comfort", "bigstanding"])->default("standart");
+
+
             $table->timestamps();
         });
     }

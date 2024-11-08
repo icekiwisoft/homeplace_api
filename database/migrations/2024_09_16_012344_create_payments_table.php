@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->uuid('id');
+            $table->uuid("client_id");
+
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Associate payment with a user
             $table->enum('payment_type', ['subscription'])->default('subscription'); // Type of payment
             $table->unsignedBigInteger('reference_id')->nullable(); // Reference to subscription, ad unlock, or other entity

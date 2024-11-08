@@ -64,6 +64,11 @@ class AnnouncerController extends Controller
         return new AnnouncerResource($announcer);
     }
 
+    public function updatePresentation() {}
+
+
+    public  function  updateAvatar() {}
+
     /**
      * Update the specified announcer in storage.
      */

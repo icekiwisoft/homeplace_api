@@ -16,7 +16,8 @@ class CategoryController extends Controller
     public function index()
     {
 
-        $categories = Category::paginate();
+        $categories = Category::paginate(20);
+
         return CategoryResource::collection($categories);
     }
 
@@ -37,7 +38,6 @@ class CategoryController extends Controller
     {
         return new CategoryResource($Category);
     }
-
 
     /**
      * Update the specified resource in storage.
