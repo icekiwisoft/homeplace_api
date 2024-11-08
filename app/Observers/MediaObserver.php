@@ -10,15 +10,17 @@ use Intervention\Image\Laravel\Facades\Image;
 
 class MediaObserver
 {
+
+
     /**
      * Handle the Media "created" event.
      */
-    public function creating(Media $media): void
+    public function creating(Media $media)
     {
 
-
-        // Log::error($media->file);
-        //     $thumbnail = Image::read($media->file)->scale(500)->save(public_path('storage\\thumbnails\\' ."vtt"));
-        $media->thumbnail = $media->file;
+        $filename = basename($media->file);
+        $pathtosave = ('storage/thumbnails/' . $filename);
+        Image::read(Storage::path($media->file))->scale(500)->save($pathtosave);
+        $media->thumbnail = $pathtosave;
     }
 }

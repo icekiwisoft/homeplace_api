@@ -15,7 +15,7 @@ class AnnouncerAdController extends Controller
      */
     public function index(Announcer $announcer)
     {
-        $ads = $announcer->ads;
+        $ads = $announcer->ads()->paginate(15);
         return  Adresource::collection($ads);
     }
 }

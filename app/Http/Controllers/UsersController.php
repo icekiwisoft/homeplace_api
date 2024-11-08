@@ -35,18 +35,11 @@ class UsersController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8|confirmed',
             'phone_number' => 'nullable|string|max:15',
             'phone_verified' => 'nullable|boolean',
             'is_admin' => 'nullable|boolean',
         ]);
-
-        if (isset($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-
         $user->update($validated);
-
         return new UserResource($user);
     }
 
@@ -56,7 +49,7 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return response()->json(['message' => 'User  deleted successfully'], 204);
+        return response()->json(null, 204);
     }
 
     /**
@@ -66,7 +59,10 @@ class UsersController extends Controller
     {
         // Check if a request already exists for this user
         if (AnnouncerRequest::where('user_id', $user->id)->exists()) {
-            return response()->json(['message' => 'A request to become an announcer already exists'], 400);
+            return response()->json([
+                'status' => 400,
+                'message' => 'A request to become an announcer already exists'
+            ], 400);
         }
 
         // Create a new announcer request

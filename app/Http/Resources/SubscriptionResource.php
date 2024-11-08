@@ -17,7 +17,7 @@ class SubscriptionResource extends JsonResource
         return [
             'id' => $this->id,
             'user' => new UserResource($this->whenLoaded('user')), // Use UserResource to return subscriber info
-            'plan_name' => $this->subscriptionPlan->name, // Assuming relation with SubscriptionPlan model
+            'plan_name' => $this->subscriptionPlan->name,
             'credits' => $this->credits,
             'price' => $this->price,
             'duration' => $this->duration,

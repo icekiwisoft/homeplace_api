@@ -17,12 +17,13 @@ class MediaResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id"=>$this->id,
-            "file"=>Storage::url($this->file) ,
-            "thumbnail"=>Storage::url($this->thumbnail),
-            "type"=>$this->type,
-            "announcer"=>new AnnouncerResource($this->announcer),
-            "ads_number"=>$this->ads()->count()
+            "id" => $this->id,
+            "file" => Storage::url($this->file),
+            "thumbnail" => Storage::url($this->thumbnail),
+            "type" => $this->type,
+            "announcer" => new AnnouncerResource($this->announcer),
+            "ads" => $this->ads()->count()
+
         ];
     }
 }

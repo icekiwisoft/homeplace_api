@@ -14,7 +14,7 @@ class AnnouncerMediaController extends Controller
      */
     public function index(Announcer $announcer)
     {
-        $medias = $announcer->medias()->get();
+        $medias = $announcer->medias()->paginate();
         return MediaResource::collection($medias);
     }
 }

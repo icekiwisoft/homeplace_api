@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RealEstate extends Model
 {
     use HasFactory;
-    protected $fillable = ['toilet', 'kitchen', 'bedroom', 'mainroom'];
+    use SoftDeletes;
+    protected $guarded = ["type"];
 
 
     public function ad()

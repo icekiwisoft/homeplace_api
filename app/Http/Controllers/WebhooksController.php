@@ -10,9 +10,7 @@ use Illuminate\Http\Request;
 
 class WebhooksController extends Controller
 {
-
-
-
+    //we inject the payment service
     public function __construct(protected PaymentService $paymentService) {}
     /**
      * Subscribe a user to a plan.
@@ -23,13 +21,10 @@ class WebhooksController extends Controller
         // Retrieve the  payment plan by name
         $payment = Payment::where('id', $request->external_reference)->firstOrFail();
 
-
         // Retrieve the subscription plan by name
         $subscriptionPlan = SubscriptionPlan::where('name', $payment->payment_type_info)->firstOrFail();
 
         // Create a new subscription for the user
-
-
         Subscription::create([
             'subscription_plan_id' => $subscriptionPlan->id,
             'user_id' => $payment->user_id,

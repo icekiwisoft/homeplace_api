@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSubscriptionRequest;
+use App\Http\Resources\SubscriptionResource;
 use App\Models\Subscription;
 use App\Models\SubscriptionPlan;
 use App\Services\PaymentService;
@@ -21,7 +22,7 @@ class SubscriptionsController extends Controller
         $user = $request->user();
         $subscriptions = Subscription::where('user_id', $user->id)->get();
 
-        return response()->json($subscriptions);
+        return SubscriptionResource::collection($subscriptions);
     }
 
     /**
@@ -43,7 +44,7 @@ class SubscriptionsController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        return response()->json($subscription);
+        return new SubscriptionResource($subscription);
     }
 
     /**

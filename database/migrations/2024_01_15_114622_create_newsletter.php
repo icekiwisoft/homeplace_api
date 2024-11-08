@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('newsletters', function (Blueprint $table) {
             $table->id();
+            $table->uuid("client_id")->unique();
             $table->string('email');
             $table->string('verification_token')->nullable();
             $table->boolean("verified")->default(false);

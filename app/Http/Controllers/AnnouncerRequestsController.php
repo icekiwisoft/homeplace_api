@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAnnouncerRequest;
-use App\Http\Resources\AnnouncerResource;
+
 use App\Models\Announcer;
 use App\Models\AnnouncerRequest;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class AnnouncerRequestsController extends Controller
@@ -79,7 +77,6 @@ class AnnouncerRequestsController extends Controller
         // If approved, create announcer account and update user role
         if ($request->status === 'approved') {
             $user = $announcerRequest->user;
-
             // Create announcer account
             Announcer::create([
                 'user_id' => $user->id,

@@ -76,9 +76,6 @@ class AuthController extends Controller
 
     public function resendVerificationCode($user_id)
     {
-        // $request->validate([
-        //     'user_id' => 'required|exists:users,id',
-        // ]);
 
         $user = User::find($user_id);
 
@@ -171,15 +168,14 @@ class AuthController extends Controller
         $token = Auth::guard('api')->attempt($credentials);
         if (!$token) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-            ], 401);
+                'code' => '403',
+                'message' => 'bad credentials',
+            ], 403);
         }
 
         // Réponse de succès
         $user = Auth::guard('api')->user();
         return response()->json([
-            'status' => 'success',
             'user' => $user,
             'authorisation' => [
                 'token' => $token,
@@ -195,30 +191,31 @@ class AuthController extends Controller
         if (!Auth::guard('api')->check()) {
             return response()->json(['message' => 'Non authentifié.'], 401);
         }
+        Auth::guard('api')->user();
 
-        // Récupérez l'utilisateur actuellement authentifié
-        $user = Auth::guard('api')->user();
-
-        // Invalider le token actuel (deconnexion)
         Auth::guard('api')->logout();
 
         // Réponse de succès
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Déconnexion réussie.',
-        ]);
+        return response()->json(null, 203);
     }
 
 
     public function refresh()
     {
-        return response()->json([
-            'status' => 'success',
-            'user' => Auth::guard('api')->user(),
-            'authorisation' => [
-                'token' => Auth::guard('api')->refresh(),
-                'type' => 'bearer',
-            ]
-        ]);
+        try {
+            return response()->json([
+                'status' => 'success',
+                'user' => Auth::guard('api')->user(),
+                'authorisation' => [
+                    'token' => Auth::guard('api')->refresh(),
+                    'type' => 'bearer',
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'code' => 400,
+                'message' => "token cannot be longer refreshed"
+            ], 400);
+        }
     }
 }

@@ -17,7 +17,7 @@ class MediaAdController extends Controller
      */
     public function index(Media $media)
     {
-        $ads = $media->ads;
+        $ads = $media->ads()->paginate(15);
         return  Adresource::collection($ads);
     }
 }

@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('announcer_requests', function (Blueprint $table) {
             $table->id();
+            $table->uuid("client_id");
+
             $table->foreignId('user_id')->constrained()->on('users');
             $table->string('status')->default('pending'); // Default status: pending ,rejected , validated
             $table->timestamps();

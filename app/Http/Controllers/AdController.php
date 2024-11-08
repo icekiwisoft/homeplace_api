@@ -61,7 +61,7 @@ class AdController extends Controller
             $query->whereIn('id', $user->unlockedAds->pluck('ad_id'));
         }
 
-        $ads = $query->with('adable')->paginate(10);
+        $ads = $query->with('adable')->paginate(20);
 
         return AdResource::collection($ads);
     }
@@ -82,9 +82,11 @@ class AdController extends Controller
         }
         // Create ad and associate it with the specific ad type
         $ad = new Ad($validated);
-        $adable->ad()->save($ad);
         $announcer = $request->user()->announcer;
+
         $ad->announcer()->associate($announcer);
+
+        $adable->ad()->save($ad);
         if ($request->hasFile("medias")) {
             $medias = new Collection();
             foreach ($request->medias as $file) {
@@ -96,7 +98,6 @@ class AdController extends Controller
                 $img->type = $mimetype;
                 $img->announcer()->associate($ad->announcer);
                 $img->save();
-
                 $medias->push($img);
             }
             $ad->medias()->syncWithoutDetaching($medias);

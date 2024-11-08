@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('furniture', function (Blueprint $table) {
+        Schema::create('furnitures', function (Blueprint $table) {
             $table->id();
+            $table->uuid("client_id");
+            $table->softDeletes();
             // $table->foreign('id')->references('id')->on('ads')->onDelete('cascade');
             $table->integer("height")->unsigned()->nullable();
             $table->integer("width")->unsigned()->nullable();
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('furniture');
+        Schema::dropIfExists('furnitures');
     }
 };

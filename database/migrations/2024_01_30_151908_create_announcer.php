@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('announcers', function (Blueprint $table) {
             $table->string("id")->primary();
+            $table->string("client_id")->unique();
+
             $table->string('name');
             $table->string('banned')->default(false);
             $table->foreignId('user_id')->constrained()->on('users');
