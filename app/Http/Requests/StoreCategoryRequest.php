@@ -23,7 +23,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'type'=>['required']
+            'type' => 'required|in:"furniture","house"'
         ];
     }
 }

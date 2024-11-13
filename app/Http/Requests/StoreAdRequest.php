@@ -3,10 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Validator;
 
-use function PHPUnit\Framework\countOf;
 
 class StoreAdRequest extends FormRequest
 {
@@ -63,8 +61,8 @@ class StoreAdRequest extends FormRequest
             // Media constraints
             'medias' => 'nullable|array', // Array for media files
             'medias.*' => 'image|mimes:jpg,jpeg,png|max:2048', // Each media file must be an image and not exceed 2MB
-            'fileid' => 'nullable|array', // Array for media IDs
-            'fileid.*' => 'integer|distinct' // Each ID should be unique if applicable
+            'filesid' => 'nullable|array', // Array for media IDs
+            'filesid.*' => 'integer|distinct' // Each ID should be unique if applicable
         ];
     }
 

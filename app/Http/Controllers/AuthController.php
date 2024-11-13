@@ -191,8 +191,6 @@ class AuthController extends Controller
         if (!Auth::guard('api')->check()) {
             return response()->json(['message' => 'Non authentifié.'], 401);
         }
-        Auth::guard('api')->user();
-
         Auth::guard('api')->logout();
 
         // Réponse de succès

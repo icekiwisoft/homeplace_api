@@ -23,7 +23,6 @@ class StoreMediaRequest extends FormRequest
     {
         return [
             'files' => ['required'],
-
         ];
     }
 }
