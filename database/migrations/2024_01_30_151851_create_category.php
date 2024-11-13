@@ -17,43 +17,43 @@ return new class extends Migration
             $table->uuid("client_id");
 
             $table->timestamps();
-            $table->integer("type")->default(0); // 0 for house, 1 for furniture
+            $table->enum("type", ["house", "furniture"])->default("house"); // 0 for house, 1 for furniture
             $table->string('name')->unique();
         });
 
         // Create house categories
         Category::create([
-            "type" => 0,
+            "type" => "house",
             "name" => "Apartment"
         ]);
         Category::create([
-            "type" => 0,
+            "type" => "house",
             "name" => "Room"
         ]);
         Category::create([
-            "type" => 0,
+            "type" => "house",
             "name" => "House"
         ]);
         Category::create([
-            "type" => 0,
+            "type" => "house",
             "name" => "Studio"
         ]);
 
         // Create furniture categories
         Category::create([
-            "type" => 1,
+            "type" => "furniture",
             "name" => "Sofas"
         ]);
         Category::create([
-            "type" => 1,
+            "type" => "furniture",
             "name" => "Tables"
         ]);
         Category::create([
-            "type" => 1,
+            "type" => "furniture",
             "name" => "Chairs"
         ]);
         Category::create([
-            "type" => 1,
+            "type" => "furniture",
             "name" => "Beds"
         ]);
     }

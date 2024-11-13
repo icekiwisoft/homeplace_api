@@ -5,18 +5,42 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
 
 class CategoryController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
 
-        $categories = Category::paginate(20);
+        $validated = $request->validate([
+            'search' => 'max:255',
+            'type' => 'nullable|in:"furniture","house"',
+        ]);
+
+        $query = Category::query();
+
+        if ($request->has('search')) {
+            $query->where(function (Builder $query) {
+                $query->where('name', 'like', '%' . request('search') . '%');
+            });
+        }
+
+        // Filter by item type (furniture or real estate)
+        if ($request->has('type')) {
+            $query->where('type', $request->type);
+        }
+
+        if ($request->has('orderBy')) {
+            $query->orderBy($request->orderBy);
+        }
+        $categories = $query->paginate(20);
 
         return CategoryResource::collection($categories);
     }

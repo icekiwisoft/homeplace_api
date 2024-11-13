@@ -14,9 +14,7 @@ use Ramsey\Uuid\Uuid;
 class Ad extends Model
 {
     use SoftDeletes;
-
     use HasFactory, HasUuids;
-
 
 
     public function uniqueIds(): array
