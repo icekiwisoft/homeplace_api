@@ -23,7 +23,7 @@ use App\Http\Controllers\WebhooksController;
 
 // Define API resource routes
 Route::apiResources([
-    'ads' => AdController::class,
+    'announces' => AdController::class,
     'categories' => CategoryController::class,
     'announcers' => AnnouncerController::class,
     'medias' => MediaController::class,
@@ -36,19 +36,19 @@ Route::apiResources([
 Route::patch('users/{user}/become-announcer', [UsersController::class, 'becomeAnnouncer']);
 
 // Define nested API resource routes
-Route::apiResource('announcers.ads', AnnouncerAdController::class)->only('index');
+Route::apiResource('announcers.announces', AnnouncerAdController::class)->only('index');
 Route::apiResource('subscriptions', SubscriptionsController::class)->except('edit');
-Route::apiResource('medias.ads', MediaAdController::class)->only('index');
+Route::apiResource('medias.announces', MediaAdController::class)->only('index');
 Route::apiResource('announcers.medias', AnnouncerMediaController::class)->only('index');
-Route::apiResource('ads.medias', AdMediaController::class)->only(['store', 'destroy', 'index']);
+Route::apiResource('announces.medias', AdMediaController::class)->only(['store', 'destroy', 'index']);
 
 //some global information  route
 Route::any('/', StatController::class);
 
 
 // Favorite management
-Route::patch('ads/{ad}/like', [FavoriteController::class, 'addToFavorites']);
-Route::patch('ads/{ad}/unlike', [FavoriteController::class, 'removeFromFavorites']);
+Route::patch('announces/{ad}/like', [FavoriteController::class, 'addToFavorites']);
+Route::patch('announces/{ad}/unlike', [FavoriteController::class, 'removeFromFavorites']);
 
 
 Route::apiResource('newsletters', NewsletterController::class);

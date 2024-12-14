@@ -25,9 +25,6 @@ class AnnouncerResource extends JsonResource
             'verified' => (bool) $this->verified,
             'realestates' => $this->whenLoaded("furnitures"),
             'furnitures' => "",
-            'state' => null
-
-
-        ];
+                ];
     }
 }

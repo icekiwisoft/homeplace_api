@@ -23,7 +23,6 @@ class Ad extends Model
     }
 
     protected $fillable = [
-        'price',
         'ad_type',
         'announcer_id',
         'category_id',
@@ -31,8 +30,13 @@ class Ad extends Model
         'description',
         'item_type',
         'devise',
-        'period'
+        'period',
+        'price'
     ];
+    protected $casts = [
+        'price' => 'double',
+    ];
+
 
     // Relation polymorphique
     public function adable()
