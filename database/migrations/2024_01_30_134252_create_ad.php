@@ -50,7 +50,7 @@ return new class extends Migration
 
             //check if is furniture or realestate
             $table->string("item_type");
-            $table->float("price")->default(0);
+            $table->decimal("price", 15, 6, true)->default(0);
 
             $table->enum("ad_type", ["location", "sale"])->default("location");
             $table->unsignedBigInteger("ad_id");

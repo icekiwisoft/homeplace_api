@@ -23,7 +23,6 @@ class StoreAnnouncerRequest extends FormRequest
     {
         return [
             'name'  => ['required'],
-
         ];
     }
 }

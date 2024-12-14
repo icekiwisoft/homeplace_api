@@ -17,7 +17,7 @@ class StoreAdRequest extends FormRequest
     public function authorize(): bool
     {
         // Check if the logged-in user has the 'announcer' role
-        return auth()->check() && auth()->user()->announcer() != null;
+        return auth()->check() && auth()->user()->announcer != null;
     }
 
     /**
@@ -29,7 +29,7 @@ class StoreAdRequest extends FormRequest
     {
         return [
             'type' => 'required|string|in:realestate,furniture', // Ensure it's  realestate or furniture
-            'price' => 'required|numeric|min:1', // Positive real
+            'price' => 'required|numeric|min:0', // Positive real
             'ad_type' => 'required|string|in:location,sale', // Ensure it's 0 or 1
             'category_id' => 'required|string', // Cannot be empty
 

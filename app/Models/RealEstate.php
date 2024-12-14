@@ -12,6 +12,11 @@ class RealEstate extends Model
     use SoftDeletes;
     protected $guarded = ["type"];
 
+    protected $casts = [
+        'gate' => 'boolean',
+        'pool' => 'boolean',
+    ];
+
 
     public function ad()
     {

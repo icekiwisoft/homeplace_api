@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAdRequest;
+use App\Http\Resources\AdDetailedResource;
 use App\Http\Resources\Adresource;
 use App\Models\Ad;
 use App\Models\Furniture;
@@ -11,9 +12,12 @@ use App\Models\Announcer;
 use App\Models\Media;
 use App\Models\Subscription;
 use App\Models\Unlocking;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class AdController extends Controller
 {
@@ -22,6 +26,8 @@ class AdController extends Controller
      */
     public function index(Request $request)
     {
+
+
         $query = Ad::query();
 
         if ($request->has('search')) {
@@ -56,12 +62,15 @@ class AdController extends Controller
         }
 
         // Filter ads unlocked by authenticated user
-        if ($request->user()) {
+        if ($request->has("unlocked")) {
             $user = $request->user();
             $query->whereIn('id', $user->unlockedAds->pluck('ad_id'));
         }
 
         $ads = $query->with('adable')->paginate(20);
+
+        if ($request->has("likeAdmin") && $request->user()?->is_admin)
+            return AdDetailedResource::collection($ads);
 
         return AdResource::collection($ads);
     }
@@ -71,6 +80,7 @@ class AdController extends Controller
      */
     public function store(StoreAdRequest $request)
     {
+        $this->authorize('create', Ad::class);
         $validated = $request->validated();
         $adable = null;
 

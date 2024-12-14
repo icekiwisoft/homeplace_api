@@ -14,8 +14,10 @@ class AnnouncerController extends Controller
     /**
      * Display a paginated listing of announcers.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $this->authorize('viewAny', Announcer::class);
+
         $announcers = Announcer::paginate(10);
         return AnnouncerResource::collection($announcers);
     }

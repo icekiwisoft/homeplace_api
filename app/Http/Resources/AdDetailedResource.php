@@ -6,9 +6,8 @@ use App\Models\furniture;
 use App\Models\RealEstate;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
-class Adresource extends  JsonResource
+class AdDetailedResource extends JsonResource
 {
     /**
      * Transform the resource collection into an array.
@@ -37,6 +36,25 @@ class Adresource extends  JsonResource
             'period' => $this->period,
             'devise' => $this->devise,
             'category' => new CategoryResource($this->category),
+            $this->mergeWhen($this->item_type == RealEstate::class, [
+                'mainroom' => $this->adable->mainroom,
+                'toilet' => $this->adable->toilet,
+                'kitchen' => $this->adable->kitchen,
+                'mainroom' => $this->adable->mainroom,
+                'garden' => $this->adable->garden,
+                'gate' => $this->adable->gate,
+                'pool' => $this->adable->pool,
+                'caution' => $this->adable->caution,
+
+            ]),
+
+            $this->mergeWhen($this->item_type == furniture::class, [
+                'height' => $this->adable->height,
+                'width' => $this->adable->width,
+                'length' => $this->adable->length,
+                'weight' => $this->adable->weight,
+            ]),
+            "announcer" => new AnnouncerResource($this->announcer),
             'creation_date' => $this->created_at,
             'liked' => true
         ];

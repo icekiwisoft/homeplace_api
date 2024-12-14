@@ -20,7 +20,7 @@ class Announcer extends Model
     protected $fillable = [
         'name',
         'user_id',
-        'verified'
+        'verified',
     ];
 
     use HasFactory, HasUuids;

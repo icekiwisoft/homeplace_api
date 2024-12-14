@@ -33,6 +33,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'phone_number',
         'phone_verified',
+        'is_admin'
     ];
 
     /**
@@ -44,6 +45,8 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
     ];
+
+
 
     /**
      * The attributes that should be cast.
@@ -80,6 +83,12 @@ class User extends Authenticatable implements JWTSubject
             'name' => $this->name,
             'is_admin' => $this->is_admin,
         ];
+    }
+
+
+    public function isAnnouncer()
+    {
+        return $this->announcer != null;
     }
 
     public function unlockedAds()
